@@ -17,17 +17,17 @@ package br.khomp.kagi.reginaldo.limite;
 
 public class ConteudoTelaPrincipal {
     
-    private String      channel;    
-    private String      number;
+    private String      channel     = "7789@10.5.0.3";    
+    private String      number      = "7789";
     private String      connect;
-    private String      smsText;
+    private String      smsText     = "olá!";
     private String      context     = "default";
     private String      serverIp    = "10.5.0.17";
     private int         serverPort  = 5038;    
     private String      user        = "khomp";
     private String      password    = "betinho";
     private String      eventText   = "\n";
-    private String[][]  tabela;
+    private String[][]  tabela       = new String[][] {new String []{"", "", ""}};
     
     
     public ConteudoTelaPrincipal() {

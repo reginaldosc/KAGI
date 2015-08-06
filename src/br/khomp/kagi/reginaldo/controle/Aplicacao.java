@@ -105,8 +105,8 @@ public class Aplicacao {
         }
 
         String req = ("Action: Login" + CRLF
-                + "Username: " + user + CRLF
-                + "Secret: " + password + CRLF + CRLF);
+                    + "Username: "    + user     + CRLF
+                    + "Secret: "      + password + CRLF + CRLF);
         
         this.changeInfo(req);
 
@@ -208,7 +208,7 @@ public class Aplicacao {
             System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
             back = true;
             list = new String [] {Integer.toString(actID),channel,"Connected"};
-            this.montaTabela(list);
+            //this.montaTabela(list);
             conteudo.setTabela(this.montaTabela(list));
             telaPrincipal.mostraTabelaChannels();
         } else {
@@ -285,30 +285,16 @@ public class Aplicacao {
     
     private String[][] montaTabela(String[] info){
         
-//        ArrayList listaDeChannels;
-        String[][] tabela = null;
-//        
-//        javax.swing.table.DefaultTableModel
-//          dtm = (javax.swing.table.DefaultTableModel)table.getModel();
-//        
-//        if (listaDeChannels.size()>0){
-            tabela = new String[2][3];
-//            try{
-//                for (int i=0; i<info.length(); i++){
-//                    Conta conta  = (Conta)listaDeChannels.get(i);
-                    tabela[0][0] = info[0];
-                    tabela[0][1] = info[1];
-                    tabela[0][2] = info[2];
-//                    tabela[i][2] = String.valueOf(conta.getSaldo());
-//                    String [] tipo = {"Simples","Especial","Poupança"};
-//                    tabela[i][3] = tipo[conta.getTipo()];
-//                }
-//            }catch(Exception e){
-//                JOptionPane.showMessageDialog(telaPrincipal," FALHA NA PESQUISA !  ");
-//            }
-//        }else{
-//            JOptionPane.showMessageDialog(telaPrincipal," SEM RELACIONAMENTOS ! !  ");
-//        }
+        String[][] tabela = conteudo.getTabela();
+        
+
+        int i = tabela.length;
+        System.out.println("i:" + i);
+        
+        tabela[1][0] = info[0];
+        tabela[1][1] = info[1];
+        tabela[1][2] = info[2];
+
         return tabela;
     }
 
