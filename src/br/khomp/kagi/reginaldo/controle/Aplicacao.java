@@ -7,6 +7,7 @@
  */
 package br.khomp.kagi.reginaldo.controle;
 
+import br.khomp.kagi.reginaldo.entidade.Call;
 import br.khomp.kagi.reginaldo.limite.ConteudoTelaPrincipal;
 import br.khomp.kagi.reginaldo.limite.TelaPrincipal;
 import br.khomp.kagi.reginaldo.limite.TelaSobre;
@@ -207,10 +208,15 @@ public class Aplicacao {
             //telaPrincipal.setJtfCampos();
             System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
             back = true;
-            list = new String [] {Integer.toString(actID),channel,"Connected"};
+
+            // cria e popula objeto call
+            Call call = new Call();
+            call.setActionID(Integer.toString(actID));
+            call.setChannel(channel);
+            call.setStatus("Connected");           
+                        
+            conteudo.setTabela(call);
             
-            //this.montaTabela(list);
-            conteudo.setTabela(this.montaTabela(list));
             telaPrincipal.mostraTabelaChannels();
         } else {
             System.out.println("Existem valores em branco!");
@@ -219,11 +225,29 @@ public class Aplicacao {
         return back;
     }
 
-    public void hangUp() {       
+    public boolean hangUp(String actionID, String channel) {       
+        boolean back = true;
+        String cause = "";
         
-        System.out.println("Hanging up..." + this.actionID);
+        String callParam
+                    = ("Action: Hangup" + CRLF
+                    +  "ActionID: "     + actionID + CRLF
+                    +  "Channel: "      + channel  + CRLF
+                    +  "Cause: "        + cause    + CRLF  + CRLF);
+
+            this.changeInfo(callParam);
+
+            if (mySocket.isConnected()) {
+                this.sendData(callParam);
+                this.receiveData(input);
+            }
+        
+        
+        
+        System.out.println("Hanging up..." + actionID);
         
         //"Action: Hangup ActionID: <value> Channel: <value> Cause: <value>"
+        return back; 
     }
 
     public void cbSMSischanged() {
@@ -251,7 +275,7 @@ public class Aplicacao {
         this.sendData(smsParam);
         this.receiveData(input);
         
-        System.out.println("Sending SMS to...");
+        System.out.println("Sending SMS to " + number);
         return back;
     }
 
@@ -287,19 +311,19 @@ public class Aplicacao {
         telaPrincipal.setJtfCampos();
     }
     
-    private String[][] montaTabela(String[] info){
-        
-        String[][] tabela = conteudo.getTabela();
-        
-
-        int i = tabela.length;
-        System.out.println("i:" + i);
-        
-        tabela[1][0] = info[0];
-        tabela[1][1] = info[1];
-        tabela[1][2] = info[2];
-
-        return tabela;
-    }
+//    private String[][] montaTabela(String[] info){
+//        
+////        String[][] tabela = conteudo.getTabela();
+////        
+////
+////        int i = tabela.length;
+////        System.out.println("i:" + i);
+////        
+////        tabela[1][0] = info[0];
+////        tabela[1][1] = info[1];
+////        tabela[1][2] = info[2];
+//
+//        return;
+//    }
 
 }

@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import br.khomp.kagi.reginaldo.controle.Aplicacao;
+import br.khomp.kagi.reginaldo.controle.CallTableModel;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +24,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     final int LARGURA = 800;
     private final Aplicacao aplicacao;
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
+    private CallTableModel tableModel;
 
     public TelaPrincipal(Aplicacao aplicacao) {
         try {
@@ -68,8 +70,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
     
     public void mostraTabelaChannels(){
-        jtChannels.setModel(new javax.swing.table.DefaultTableModel(conteudo.getTabela(),
-                new String [] {"ActionID", "Channel", "Status", ""}));
+        //neste ponto � criado o modelo da JTable
+        tableModel = new CallTableModel(conteudo.getTabela());
+	jtChannels.setModel(tableModel);
+        jtChannels.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     public void habilitaCampos() {
@@ -143,7 +147,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setIconImages(null);
         setMinimumSize(new java.awt.Dimension(875, 690));
         setName("jfPrincipal"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(880, 677));
         setResizable(false);
 
         jpSocketConnection.setBorder(javax.swing.BorderFactory.createTitledBorder("Socket Connection"));
@@ -445,6 +448,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtChannels.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jtChannelsKeyPressed(evt);
+            }
+        });
         jScrollPane3.setViewportView(jtChannels);
 
         javax.swing.GroupLayout jpTableLayout = new javax.swing.GroupLayout(jpTable);
@@ -579,7 +587,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiAsteriskActionPerformed
 
     private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
-        // TODO add your handling code here:
+        System.out.println("presionou");
     }//GEN-LAST:event_jtfChannelActionPerformed
 
     private void jbConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConnectActionPerformed
@@ -622,17 +630,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setChannel(jtfChannel.getText());
         conteudo.setContext(jtfContext.getText());
         if (aplicacao.onCall()){
-            //jbCall.setEnabled(false);
             jbHangup.setEnabled(true);
-        } else {
-            //jbCall.setEnabled(true);
-            jbHangup.setEnabled(false);
         }
-        
     }//GEN-LAST:event_jbCallActionPerformed
 
     private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
-        aplicacao.hangUp();
+        int i = jtChannels.getSelectedRow();
+        String actionID = jtChannels.getValueAt(i, 0).toString();
+        String channel  = jtChannels.getValueAt(i, 1).toString();
+        
+        if (aplicacao.hangUp(actionID, channel)){
+            tableModel.onRemove(i);
+        }
     }//GEN-LAST:event_jbHangupActionPerformed
 
     private void jcbSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSMSActionPerformed
@@ -658,6 +667,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jbSendSmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendSmsActionPerformed
         conteudo.setSmsText(jtaSMS.getText());
+        conteudo.setChannel(jtfChannel.getText());
+        conteudo.setNumber(jtfNumber.getText());
         aplicacao.sendSms();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
@@ -670,6 +681,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
         aplicacao.changeInfo("");
         
     }//GEN-LAST:event_jbClearEventsActionPerformed
+
+    private void jtChannelsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtChannelsKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        if(keyCode == 127) {
+            System.out.println("Pressionou o delete");
+            int ret = JOptionPane.showConfirmDialog(null, "Deseja realmente finalizar a ligação?");
+            switch (ret) {
+                case 0:
+                    System.out.println("Sim");
+                    tableModel.onRemove(jtChannels.getSelectedRow());
+                    break;
+                case 1:
+                    System.out.println("Não");
+                    break;
+                case 2:
+                    System.out.println("Cancelar");
+                    break;
+            }            
+        } else {
+            JOptionPane.showMessageDialog(null, "Para desligar a ligação, pressione o 'Delete'");
+        }
+    }//GEN-LAST:event_jtChannelsKeyPressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
         Object[] options = {"Sim", "N�o"};

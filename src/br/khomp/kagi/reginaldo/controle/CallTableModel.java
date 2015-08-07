@@ -18,7 +18,7 @@ public class CallTableModel extends AbstractTableModel{
 	
 	public CallTableModel(List<Call> dados) {
 		//seto os dados no construtor
-		this.dados=dados;
+		this.dados = dados;
 	}
 	
 	@Override
@@ -38,11 +38,13 @@ public class CallTableModel extends AbstractTableModel{
 		//retorna o tipo de dado, para cada coluna
 		switch (columnIndex) {
 		case ActionID:
-			return String.class;
+                    return String.class;
 		case Channel:
-			return String.class;
+                    return String.class;
 		case Status:
-			return String.class;		
+                    return String.class;
+                case vazio:
+                    return String.class;
 		default:
 			throw new IndexOutOfBoundsException("Coluna Invalida!!!");
 		}

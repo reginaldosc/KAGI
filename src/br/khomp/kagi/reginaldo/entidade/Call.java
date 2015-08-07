@@ -1,16 +1,11 @@
 package br.khomp.kagi.reginaldo.entidade;
 
-import java.sql.Date;
 
-/**
- * classe Javabean entidade Empregado
- * @author Roberto Silva
- */
 public class Call {
 	private String actionID;
 	private String channel;
 	private String status;
-	private String  vazio;	
+	private String vazio;	
 	
 	public Call() {
 		//inicializando variaveis
@@ -63,14 +58,14 @@ public class Call {
 	}
 
 	/**
-	 * @return the dataNasc
+	 * @return the vazio
 	 */
 	public String getVazio() {
 		return vazio;
 	}
 
 	/**
-	 * @param vazio the dataNasc to set
+	 * @param vazio the Vazio to set
 	 */
 	public void setVazio(String vazio) {
 		this.vazio = vazio;

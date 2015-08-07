@@ -135,7 +135,7 @@ public class AplicacaoTest extends TestCase {
     public void testHangUp() {
         System.out.println("hangUp");
         Aplicacao instance = new Aplicacao();
-        instance.hangUp();
+       // instance.hangUp(String,);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

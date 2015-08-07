@@ -9,8 +9,11 @@
 
 package br.khomp.kagi.reginaldo.limite;
 
+import br.khomp.kagi.reginaldo.entidade.Call;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,11 +33,9 @@ public class ConteudoTelaPrincipal {
     private int         serverPort  = 5038;    
     private String      user        = "khomp";
     private String      password    = "betinho";
-    private String      eventText   = "\n";
-    private String[][]  tabela       = new String[][] {new String []{"", "", ""}};
-    private Map<Integer, String[]> listaString = new HashMap<>();
-    
-    
+    private String      eventText   = "\n";    
+    private final List<Call>  tabela      = new ArrayList<>();
+ 
     
     public ConteudoTelaPrincipal() {
     }
@@ -47,11 +48,11 @@ public class ConteudoTelaPrincipal {
         this.smsText = text;
     }
     
-       public void setTabela(String[][] tabela){
-        this.tabela = tabela;
+       public void setTabela(Call tabela){
+        this.tabela.add(tabela);
     }
     
-    public String[][] getTabela(){
+    public List<Call> getTabela(){
         return tabela;
     }
         
