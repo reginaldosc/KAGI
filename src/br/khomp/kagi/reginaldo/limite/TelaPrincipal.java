@@ -32,7 +32,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
         }
         initComponents();
-        this.setJtfCampos();
+        this.setCampos();
         this.aplicacao = aplicacao;
         this.mostraTabelaChannels();
 
@@ -57,7 +57,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.conteudo = conteudo;
     }
 
-    public final void setJtfCampos() {
+    public final void setCampos() {
         jtfChannel.setText(conteudo.getChannel());
         jtfContext.setText(conteudo.getContext());
         jtfNumber.setText(conteudo.getNumber());
@@ -598,7 +598,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 
         try {
             if (aplicacao.onConnect()) {
-                this.setJtfCampos();
+                this.setCampos();
                 jbDisconnect.setEnabled(true);
                 jbConnect.setEnabled(false);
                 jbCall.setEnabled(true);
@@ -612,7 +612,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     private void jbDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDisconnectActionPerformed
         aplicacao.onDisconnect();
-        this.setJtfCampos();
+        this.setCampos();
         jbDisconnect.setEnabled(false);
         jbConnect.setEnabled(true);
     }//GEN-LAST:event_jbDisconnectActionPerformed
@@ -621,7 +621,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         if (!aplicacao.sendPing()) {
             System.out.println("error");
         } else {
-            this.setJtfCampos();
+            this.setCampos();
         }
     }//GEN-LAST:event_jbPingActionPerformed
 

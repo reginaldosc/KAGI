@@ -32,16 +32,16 @@ public class Aplicacao {
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    private String [] list  = new String[4];
-    
+    private String[] list = new String[4];
+
     private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
     private final String p_Response;
 
-    private Socket          mySocket;
-    private PrintWriter     output;
-    private BufferedReader  input;
-    private SocketAddress   sockaddr = null;
+    private Socket mySocket;
+    private PrintWriter output;
+    private BufferedReader input;
+    private SocketAddress sockaddr = null;
 
     TelaPrincipal telaPrincipal = new TelaPrincipal(this);
     ConteudoTelaPrincipal conteudo = telaPrincipal.getConteudo();
@@ -55,7 +55,7 @@ public class Aplicacao {
         telaPrincipal.habilitaCampos();
         telaPrincipal.mostraTela(true);
         //this.montaTabela(new String[]{"1","2"});
-    } 
+    }
 
     /* mostra a tela - Sobre */
     public void sobre() {
@@ -82,16 +82,16 @@ public class Aplicacao {
     public boolean onConnect() throws IOException {
 
         /* variaveis locais */
-        ip          = conteudo.getServerIp();
-        port        = conteudo.getServerPort();
-        user        = conteudo.getUser();
-        password    = conteudo.getPassword();
-        
+        ip = conteudo.getServerIp();
+        port = conteudo.getServerPort();
+        user = conteudo.getUser();
+        password = conteudo.getPassword();
+
         boolean back = false;
 
         txtEvents = "Trying Connection to: " + ip + ":" + port;
         conteudo.setJlConnection(txtEvents);
-        telaPrincipal.changeJlConnection();        
+        telaPrincipal.changeJlConnection();
         this.changeInfo(txtEvents);
 
         /* Cria Socket */
@@ -106,9 +106,9 @@ public class Aplicacao {
         }
 
         String req = ("Action: Login" + CRLF
-                    + "Username: "    + user     + CRLF
-                    + "Secret: "      + password + CRLF + CRLF);
-        
+                + "Username: " + user + CRLF
+                + "Secret: " + password + CRLF + CRLF);
+
         this.changeInfo(req);
 
         if (mySocket.isConnected()) {
@@ -121,33 +121,33 @@ public class Aplicacao {
             input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
 
             this.sendData(req);
-            this.receiveData(input);
-            back = true;
+            if (this.receiveData(input)) {
+                back = true;
+            }
         }
         return back;
     }
 
     /* Metodo chamado ao apertar o botão Call na tela Principal */
     public void onDisconnect() {
-        
-        String req = ("Action: Logoff" + CRLF + CRLF);        
+
+        String req = ("Action: Logoff" + CRLF + CRLF);
         this.changeInfo(req);
-        
+
         this.sendData(req);
-        this.receiveData(input);
-        
-        try {
-            output.close();
-            input.close();
-            mySocket.close();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        if (this.receiveData(input)) {
+            try {
+                output.close();
+                input.close();
+                mySocket.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+            txtEvents = "Disconnected...";
+            conteudo.setJlConnection(txtEvents);
+            telaPrincipal.changeJlConnection();
+            this.changeInfo(txtEvents);
         }
-        txtEvents = "Disconnected...";
-        conteudo.setJlConnection(txtEvents);
-        telaPrincipal.changeJlConnection();
-        this.changeInfo(txtEvents);
-        
     }
 
     public boolean sendPing() {
@@ -176,78 +176,77 @@ public class Aplicacao {
     }
 
     /*
-    Make a call to AMI
-    */
+     Make a call to AMI
+     */
     public boolean onCall() {
 
-        String number   = conteudo.getNumber();
-        String channel  = conteudo.getChannel();
-        String context  = conteudo.getContext();
-        int priority    = 1;
-        boolean back    = false;
-        int actID       = this.actionID + 1;
-        
-        
-        this.actionID   = actID;
-        
-        if (!number.equals("")&& !channel.equals("") && !context.equals("")) {
+        String number = conteudo.getNumber();
+        String channel = conteudo.getChannel();
+        String context = conteudo.getContext();
+        int priority = 1;
+        boolean back = false;
+        int actID = this.actionID + 1;
+
+        this.actionID = actID;
+
+        if (!number.equals("") && !channel.equals("") && !context.equals("")) {
             String callParam
                     = ("Action: Originate" + CRLF
-                    +  "ActionID: "        + actID    + CRLF 
-                    +  "Channel: sip/"     + channel  + CRLF 
-                    +  "Context: "         + context  + CRLF
-                    +  "Exten: "           + number   + CRLF
-                    +  "Priority: "        + priority + CRLF + CRLF);
+                    + "ActionID: " + actID + CRLF
+                    + "Channel: sip/" + channel + CRLF
+                    + "Context: " + context + CRLF
+                    + "Exten: " + number + CRLF
+                    + "Priority: " + priority + CRLF + CRLF);
 
             this.changeInfo(callParam);
 
             if (mySocket.isConnected()) {
                 this.sendData(callParam);
-                this.receiveData(input);
-            }
-            //telaPrincipal.setJtfCampos();
-            System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
-            back = true;
+                //this.receiveData(input);
+                System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
+                if (this.receiveData(input)) {
+                    
+                    back = true;
 
-            // cria e popula objeto call
-            Call call = new Call();
-            call.setActionID(Integer.toString(actID));
-            call.setChannel(channel);
-            call.setStatus("Connected");           
-                        
-            conteudo.setTabela(call);
-            
-            telaPrincipal.mostraTabelaChannels();
+                    // cria e popula objeto call
+                    Call call = new Call();
+                    call.setActionID(Integer.toString(actID));
+                    call.setChannel(channel);
+                    call.setStatus("Connected");
+
+                    conteudo.setTabela(call);
+                }
+                //this.changeInfo();
+                telaPrincipal.mostraTabelaChannels();
+            }
         } else {
             System.out.println("Existem valores em branco!");
-        }        
-        
+        }
+
         return back;
     }
 
-    public boolean hangUp(String actionID, String channel) {       
-        boolean back = true;
+    public boolean hangUp(String actionID, String channel) {
+        boolean back = false;
         String cause = "";
-        
+
         String callParam
-                    = ("Action: Hangup" + CRLF
-                    +  "ActionID: "     + actionID + CRLF
-                    +  "Channel: "      + channel  + CRLF
-                    +  "Cause: "        + cause    + CRLF  + CRLF);
+                = ("Action: Hangup" + CRLF
+                + "ActionID: " + actionID + CRLF
+                + "Channel: " + channel + CRLF
+                + "Cause: " + cause + CRLF + CRLF);
 
-            this.changeInfo(callParam);
+        this.changeInfo(callParam);
 
-            if (mySocket.isConnected()) {
-                this.sendData(callParam);
-                this.receiveData(input);
+        if (mySocket.isConnected()) {
+            this.sendData(callParam);
+            if(this.receiveData(input)){
+                back = true;
+                System.out.println("Hanging up..." + actionID);
             }
-        
-        
-        
-        System.out.println("Hanging up..." + actionID);
-        
-        //"Action: Hangup ActionID: <value> Channel: <value> Cause: <value>"
-        return back; 
+        }
+
+        return back;
     }
 
     public void cbSMSischanged() {
@@ -256,25 +255,27 @@ public class Aplicacao {
 
     /* Action: SendText | ActionID: <value> | Channel: <value> | Message: <value> */
     public boolean sendSms() {
-       
-        String channel  = conteudo.getChannel();
-        String text     = conteudo.getSmsText();
-        String number   = conteudo.getNumber();
-        boolean back    = false;
-        int actID       = this.actionID + 1;
-        
-        this.actionID   = actID;
+
+        String channel = conteudo.getChannel();
+        String text = conteudo.getSmsText();
+        String number = conteudo.getNumber();
+        boolean back = false;
+        int actID = this.actionID + 1;
+
+        this.actionID = actID;
         String smsParam
-                    = ("Action: KSendSMS"   + CRLF
-                    +  "ActionID: "         + actID    + CRLF 
-                    +  "device: "           + channel  + CRLF
-                    +  "destination: "      + number   + CRLF
-                    +  "Message: "          + text     + CRLF
-                    +  "Confirmation: true" + CRLF + CRLF);
-        
+                = ("Action: KSendSMS" + CRLF
+                + "ActionID: " + actID + CRLF
+                + "device: " + channel + CRLF
+                + "destination: " + number + CRLF
+                + "Message: " + text + CRLF
+                + "Confirmation: true" + CRLF + CRLF);
+
         this.sendData(smsParam);
-        this.receiveData(input);
-        
+        if (this.receiveData(input)){
+            back = true;
+        }
+
         System.out.println("Sending SMS to " + number);
         return back;
     }
@@ -285,45 +286,34 @@ public class Aplicacao {
         output.flush();
     }
 
-    private void receiveData(BufferedReader input) {
-
+    private boolean receiveData(BufferedReader input) {
+        boolean back = false;
         String txt;
         try {
-            while (!(txt = input.readLine()).equals("")) {               
+            while (!(txt = input.readLine()).equals("")) {
                 this.changeInfo(txt);
+                if (txt.equalsIgnoreCase("Response: Success")) {
+                    back = true;
+                } else if (txt.equalsIgnoreCase("Response: Goodbye")) {
+                    back = true;
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return back;
     }
-    
-    /* Atualiza tela de Eventos e logs */
 
+    /* Atualiza tela de Eventos e logs */
     /**
      *
      * @param text
      */
-    
     public void changeInfo(String text) {
-        
+
         System.out.println(text);
         conteudo.setEventText(text);
-        telaPrincipal.setJtfCampos();
+        telaPrincipal.setCampos();
     }
-    
-//    private String[][] montaTabela(String[] info){
-//        
-////        String[][] tabela = conteudo.getTabela();
-////        
-////
-////        int i = tabela.length;
-////        System.out.println("i:" + i);
-////        
-////        tabela[1][0] = info[0];
-////        tabela[1][1] = info[1];
-////        tabela[1][2] = info[2];
-//
-//        return;
-//    }
 
 }
