@@ -208,6 +208,7 @@ public class Aplicacao {
             System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
             back = true;
             list = new String [] {Integer.toString(actID),channel,"Connected"};
+            
             //this.montaTabela(list);
             conteudo.setTabela(this.montaTabela(list));
             telaPrincipal.mostraTabelaChannels();
@@ -234,15 +235,18 @@ public class Aplicacao {
        
         String channel  = conteudo.getChannel();
         String text     = conteudo.getSmsText();
+        String number   = conteudo.getNumber();
         boolean back    = false;
         int actID       = this.actionID + 1;
         
         this.actionID   = actID;
         String smsParam
-                    = ("Action: SendText"   + CRLF
+                    = ("Action: KSendSMS"   + CRLF
                     +  "ActionID: "         + actID    + CRLF 
-                    +  "Channel: "          + channel
-                    +  "Message: "          + text  + CRLF + CRLF);
+                    +  "device: "           + channel  + CRLF
+                    +  "destination: "      + number   + CRLF
+                    +  "Message: "          + text     + CRLF
+                    +  "Confirmation: true" + CRLF + CRLF);
         
         this.sendData(smsParam);
         this.receiveData(input);

@@ -9,6 +9,10 @@
 
 package br.khomp.kagi.reginaldo.limite;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 /**
  *
  *@author  Reginaldo Gon�alves
@@ -17,21 +21,22 @@ package br.khomp.kagi.reginaldo.limite;
 
 public class ConteudoTelaPrincipal {
     
-    private String      channel     = "7789@10.5.0.3";    
-    private String      number      = "7789";
+    private String      channel     = "b0c0";    
+    private String      number      = "84279344";
     private String      connect;
     private String      smsText     = "olá!";
     private String      context     = "default";
-    private String      serverIp    = "10.5.0.17";
+    private String      serverIp    = "10.5.0.9";
     private int         serverPort  = 5038;    
     private String      user        = "khomp";
     private String      password    = "betinho";
     private String      eventText   = "\n";
     private String[][]  tabela       = new String[][] {new String []{"", "", ""}};
+    private Map<Integer, String[]> listaString = new HashMap<>();
+    
     
     
     public ConteudoTelaPrincipal() {
-        
     }
     
     public String getSmsText() {

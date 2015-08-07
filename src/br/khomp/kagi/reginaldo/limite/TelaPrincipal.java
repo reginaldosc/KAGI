@@ -657,6 +657,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbSMSItemStateChanged
 
     private void jbSendSmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendSmsActionPerformed
+        conteudo.setSmsText(jtaSMS.getText());
         aplicacao.sendSms();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
