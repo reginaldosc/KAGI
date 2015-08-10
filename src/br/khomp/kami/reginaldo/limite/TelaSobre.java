@@ -25,7 +25,7 @@ public class TelaSobre extends javax.swing.JDialog {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();// copiar
         setLocation(screenSize.width/2 - LARGURA/2,// Centraliza o Frame Principal no meio da Tela
                 screenSize.height/2 - ALTURA/2);// r
-        setSize(LARGURA, ALTURA);//determina o Tamanho da tela Principal
+        setSize(LARGURA, ALTURA);//determina o Tamanho da tela
         
         
     }
@@ -44,7 +44,8 @@ public class TelaSobre extends javax.swing.JDialog {
         jbOKsobre = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Sobre");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("br/khomp/kami/reginaldo/limite/Bundle"); // NOI18N
+        setTitle(bundle.getString("TelaSobre.title")); // NOI18N
         setIconImage(null);
         setIconImages(null);
         setResizable(false);
@@ -55,7 +56,7 @@ public class TelaSobre extends javax.swing.JDialog {
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("Khomp S/A  \n\nReginaldo  Gonçalves   \n\n© 2015 Khomp S/A.\nTodos direitos reservados.\nVersão 0.01 Beta");
+        jTextArea1.setText(bundle.getString("TelaSobre.jTextArea1.text")); // NOI18N
         jTextArea1.setAutoscrolls(false);
         jTextArea1.setMargin(new java.awt.Insets(4, 2, 2, 2));
         jScrollPane1.setViewportView(jTextArea1);
@@ -72,7 +73,7 @@ public class TelaSobre extends javax.swing.JDialog {
         );
 
         jbOKsobre.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jbOKsobre.setText("OK");
+        jbOKsobre.setText(bundle.getString("TelaSobre.jbOKsobre.text")); // NOI18N
         jbOKsobre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbOKsobreActionPerformed(evt);

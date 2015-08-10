@@ -97,7 +97,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jpSocketConnection = new javax.swing.JPanel();
         jlServerIP = new javax.swing.JLabel();
@@ -142,10 +141,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jmiFreeSwitch = new javax.swing.JMenuItem();
         jmSobre = new javax.swing.JMenu();
 
-        jButton1.setText("jButton1");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("KAGI");
+        setTitle("KAMI");
         setIconImages(null);
         setMinimumSize(new java.awt.Dimension(875, 690));
         setName("jfPrincipal"); // NOI18N
@@ -737,7 +734,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

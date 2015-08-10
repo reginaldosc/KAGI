@@ -22,6 +22,7 @@ import java.net.SocketAddress;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,16 +33,31 @@ public class Aplicacao {
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    private String[] list = new String[4];
+    //private String[] list = new String[4];
 
     private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
-    private final String p_Response;
+    //private final String p_Response;
 
     private Socket mySocket;
     private PrintWriter output;
     private BufferedReader input;
     private SocketAddress sockaddr = null;
+    
+    private enum CausesEnum { 
+        CAUSE_NOTDEFINED("11"),
+        CAUSE_NORMAL("12"),
+        CAUSE_BUSY("13"),
+        CAUSE_FAILURE("14"),
+        CAUSE_CONGESTION("15"),
+        CAUSE_UNALLOCATED("16");
+        
+        
+        public String valorCause; 
+        CausesEnum(String valor) { 
+            valorCause = valor; 
+        } 
+    }
 
     TelaPrincipal telaPrincipal = new TelaPrincipal(this);
     ConteudoTelaPrincipal conteudo = telaPrincipal.getConteudo();
@@ -50,7 +66,7 @@ public class Aplicacao {
      * Creates a new instance of Aplicacao
      */
     public Aplicacao() {
-        this.p_Response = "";
+        //this.p_Response = "";
         telaPrincipal.setIconImage(null);
         telaPrincipal.habilitaCampos();
         telaPrincipal.mostraTela(true);
@@ -58,12 +74,19 @@ public class Aplicacao {
     }
 
     /* mostra a tela - Sobre */
+    /**
+     * 
+     */
     public void sobre() {
         TelaSobre tela = new TelaSobre(telaPrincipal, true);
         tela.mostraTela(true);
     }
 
     /* selecao entre asterisk e freeswitch */
+    /**
+     * 
+     * @param teste 
+     */
     public void teste(String teste) {
         switch (teste) {
             case "A":
@@ -71,6 +94,7 @@ public class Aplicacao {
                 break;
             case "F":
                 System.out.println("FreeSwitch test selected.");
+                JOptionPane.showMessageDialog(telaPrincipal, "teste não implementado!");
                 break;
             default:
                 System.out.println("Invalid test!");
@@ -79,6 +103,11 @@ public class Aplicacao {
     }
 
     /* Chamada ao apertar o botão Login na tela Principal */
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     */
     public boolean onConnect() throws IOException {
 
         /* variaveis locais */
@@ -129,6 +158,9 @@ public class Aplicacao {
     }
 
     /* Metodo chamado ao apertar o botão Call na tela Principal */
+    /**
+     * 
+     */
     public void onDisconnect() {
 
         String req = ("Action: Logoff" + CRLF + CRLF);
@@ -150,6 +182,10 @@ public class Aplicacao {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     public boolean sendPing() {
         ip = conteudo.getServerIp();
         port = conteudo.getServerPort();
@@ -175,8 +211,9 @@ public class Aplicacao {
         return retv;
     }
 
-    /*
-     Make a call to AMI
+    /**
+     * 
+     * @return 
      */
     public boolean onCall() {
 
@@ -226,6 +263,12 @@ public class Aplicacao {
         return back;
     }
 
+    /**
+     * 
+     * @param actionID
+     * @param channel
+     * @return 
+     */
     public boolean hangUp(String actionID, String channel) {
         boolean back = false;
         String cause = "";
@@ -249,11 +292,21 @@ public class Aplicacao {
         return back;
     }
 
+    /**
+     * 
+     */
     public void cbSMSischanged() {
 
     }
 
-    /* Action: SendText | ActionID: <value> | Channel: <value> | Message: <value> */
+    /**
+     * Action: KSendSMS
+     * ActionID:
+     * Device:
+     * Destination:
+     * Confirmation:
+     * Message:
+     **/ 
     public boolean sendSms() {
 
         String channel = conteudo.getChannel();
@@ -273,20 +326,31 @@ public class Aplicacao {
                 + "Confirmation: " + confirmation + CRLF + CRLF);
 
         this.sendData(smsParam);
+        this.changeInfo(smsParam);
         if (this.receiveData(input)){
             back = true;
+            //this.changeInfo(smsParam);
         }
 
         System.out.println("Sending SMS to " + number);
         return back;
     }
 
+    /**
+     * 
+     * @param req 
+     */
     private void sendData(String req) {
         System.out.println(CRLF + req);
         output.write(req);
         output.flush();
     }
 
+    /**
+     * 
+     * @param input
+     * @return 
+     */
     private boolean receiveData(BufferedReader input) {
         boolean back = false;
         String txt;
