@@ -88,8 +88,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jcbSMS.setSelected(false);
         jpSMS.setEnabled(false);
         jtaEvents.setEditable(false);
-        jtaEvents.setEnabled(true);
-        jbClearEvents.setEnabled(true);
+        jtaEvents.setEnabled(false);
+        jbClearEvents.setEnabled(false);
+        jcbConfirmation.setEnabled(false);
     }
 
 
@@ -134,6 +135,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jpTable = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtChannels = new javax.swing.JTable();
+        jcbConfirmation = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmTestes = new javax.swing.JMenu();
         jmiAsterisk = new javax.swing.JMenuItem();
@@ -472,6 +474,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
         );
 
+        jcbConfirmation.setText("Confirmation");
+        jcbConfirmation.setToolTipText("Confirmação de recebimento de SMS");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -483,9 +488,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jpExtensions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jcbSMS, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                                    .addComponent(jpSMS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jpSMS, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jcbSMS, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jcbConfirmation)))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jpSocketConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -502,7 +511,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jcbSMS)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jcbSMS)
+                                    .addComponent(jcbConfirmation))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jpSMS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jpExtensions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -602,6 +613,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jbDisconnect.setEnabled(true);
                 jbConnect.setEnabled(false);
                 jbCall.setEnabled(true);
+                jtaEvents.setEnabled(true);
+                jbClearEvents.setEnabled(true);
             }
         } catch (IOException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -629,7 +642,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setNumber(jtfNumber.getText());
         conteudo.setChannel(jtfChannel.getText());
         conteudo.setContext(jtfContext.getText());
-        if (aplicacao.onCall()){
+        if (aplicacao.onCall()){            
             jbHangup.setEnabled(true);
         }
     }//GEN-LAST:event_jbCallActionPerformed
@@ -651,12 +664,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
             jtaSMS.setEditable(true);
             jbSendSms.setEnabled(true);
             jbClearSMS.setEnabled(true);
+            jcbConfirmation.setEnabled(true);
         } else {
             jpSMS.setEnabled(false);
             jtaSMS.setEditable(false);
             jbSendSms.setEnabled(false);
             jbClearSMS.setEnabled(false);
             jtaSMS.setText(null);
+            jcbConfirmation.setEnabled(false);
         }
        
     }//GEN-LAST:event_jcbSMSActionPerformed
@@ -669,6 +684,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setSmsText(jtaSMS.getText());
         conteudo.setChannel(jtfChannel.getText());
         conteudo.setNumber(jtfNumber.getText());
+        conteudo.setConfirmation(jcbConfirmation.isSelected());
         aplicacao.sendSms();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
@@ -735,6 +751,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jbHangup;
     private javax.swing.JButton jbPing;
     private javax.swing.JButton jbSendSms;
+    private javax.swing.JCheckBox jcbConfirmation;
     private javax.swing.JCheckBox jcbSMS;
     private javax.swing.JLabel jlChannel;
     private javax.swing.JLabel jlConnection;

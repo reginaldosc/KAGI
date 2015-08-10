@@ -11,10 +11,7 @@ package br.khomp.kagi.reginaldo.limite;
 
 import br.khomp.kagi.reginaldo.entidade.Call;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -27,6 +24,7 @@ public class ConteudoTelaPrincipal {
     private String      channel     = "b0c0";    
     private String      number      = "84279344";
     private String      connect;
+    private boolean     confirmation;
     private String      smsText     = "olá!";
     private String      context     = "default";
     private String      serverIp    = "10.5.0.9";
@@ -133,6 +131,14 @@ public class ConteudoTelaPrincipal {
     
     public String getJlConnection() {
         return connect;
+    }
+
+    void setConfirmation(boolean selected) {
+        this.confirmation = selected;
+    }
+    
+    public boolean getConfirmation(){
+        return confirmation;
     }
     
     

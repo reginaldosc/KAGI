@@ -128,12 +128,17 @@
                               <Group type="102" attributes="0">
                                   <Component id="jpExtensions" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jcbSMS" alignment="0" pref="273" max="32767" attributes="0"/>
-                                      <Component id="jpSMS" alignment="0" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jpSMS" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jcbSMS" min="-2" pref="103" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="jcbConfirmation" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="jpSocketConnection" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jpSocketConnection" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jpEvents" min="-2" max="-2" attributes="0"/>
@@ -154,7 +159,10 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="jcbSMS" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jcbSMS" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jcbConfirmation" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="jpSMS" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -661,6 +669,12 @@
             </Container>
           </SubComponents>
         </Container>
+        <Component class="javax.swing.JCheckBox" name="jcbConfirmation">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Confirmation"/>
+            <Property name="toolTipText" type="java.lang.String" value="Confirma&#xe7;&#xe3;o de recebimento de SMS"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

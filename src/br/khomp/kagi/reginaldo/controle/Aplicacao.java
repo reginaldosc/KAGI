@@ -260,6 +260,7 @@ public class Aplicacao {
         String text = conteudo.getSmsText();
         String number = conteudo.getNumber();
         boolean back = false;
+        boolean confirmation = conteudo.getConfirmation();
         int actID = this.actionID + 1;
 
         this.actionID = actID;
@@ -269,7 +270,7 @@ public class Aplicacao {
                 + "device: " + channel + CRLF
                 + "destination: " + number + CRLF
                 + "Message: " + text + CRLF
-                + "Confirmation: true" + CRLF + CRLF);
+                + "Confirmation: " + confirmation + CRLF + CRLF);
 
         this.sendData(smsParam);
         if (this.receiveData(input)){
