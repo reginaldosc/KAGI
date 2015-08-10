@@ -7,9 +7,9 @@
  * and open the template in the editor.
  */
 
-package br.khomp.kagi.reginaldo.limite;
+package br.khomp.kami.reginaldo.limite;
 
-import br.khomp.kagi.reginaldo.entidade.Call;
+import br.khomp.kami.reginaldo.entidade.Call;
 import java.util.ArrayList;
 import java.util.List;
 

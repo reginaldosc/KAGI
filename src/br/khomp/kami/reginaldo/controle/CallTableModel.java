@@ -1,6 +1,6 @@
-package br.khomp.kagi.reginaldo.controle;
+package br.khomp.kami.reginaldo.controle;
 
-import br.khomp.kagi.reginaldo.entidade.Call;
+import br.khomp.kami.reginaldo.entidade.Call;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 

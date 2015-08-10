@@ -3,13 +3,13 @@
  *
  * Created on 1 de Agosto de 2015
  */
-package br.khomp.kagi.reginaldo.limite;
+package br.khomp.kami.reginaldo.limite;
 
 import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import br.khomp.kagi.reginaldo.controle.Aplicacao;
-import br.khomp.kagi.reginaldo.controle.CallTableModel;
+import br.khomp.kami.reginaldo.controle.Aplicacao;
+import br.khomp.kami.reginaldo.controle.CallTableModel;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

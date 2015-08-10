@@ -5,12 +5,12 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-package br.khomp.kagi.reginaldo.controle;
+package br.khomp.kami.reginaldo.controle;
 
-import br.khomp.kagi.reginaldo.entidade.Call;
-import br.khomp.kagi.reginaldo.limite.ConteudoTelaPrincipal;
-import br.khomp.kagi.reginaldo.limite.TelaPrincipal;
-import br.khomp.kagi.reginaldo.limite.TelaSobre;
+import br.khomp.kami.reginaldo.entidade.Call;
+import br.khomp.kami.reginaldo.limite.ConteudoTelaPrincipal;
+import br.khomp.kami.reginaldo.limite.TelaPrincipal;
+import br.khomp.kami.reginaldo.limite.TelaSobre;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
