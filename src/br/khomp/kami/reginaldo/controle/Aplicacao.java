@@ -33,7 +33,7 @@ public class Aplicacao {
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    //private String[] list = new String[4];
+    public int choosenTest = 0;
 
     private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
@@ -90,13 +90,16 @@ public class Aplicacao {
     public void teste(String teste) {
         switch (teste) {
             case "A":
+                choosenTest = 0;
                 System.out.println("Asterisk test selected.");
                 break;
             case "F":
+                choosenTest = 1;
                 System.out.println("FreeSwitch test selected.");
                 JOptionPane.showMessageDialog(telaPrincipal, "teste não implementado!");
                 break;
             default:
+                choosenTest = -1;
                 System.out.println("Invalid test!");
                 break;
         }
