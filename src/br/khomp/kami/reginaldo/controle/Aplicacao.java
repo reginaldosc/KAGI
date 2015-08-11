@@ -66,7 +66,7 @@ public class Aplicacao {
      * Creates a new instance of Aplicacao
      */
     public Aplicacao() {
-        //this.p_Response = "";
+        this.txtEvents = null;
         telaPrincipal.setIconImage(null);
         telaPrincipal.habilitaCampos();
         telaPrincipal.mostraTela(true);
@@ -256,7 +256,6 @@ public class Aplicacao {
 
                     conteudo.setTabela(call);
                 }
-                //this.changeInfo();
                 telaPrincipal.mostraTabelaChannels();
             }
         } else {

@@ -20,20 +20,15 @@ import java.util.logging.Logger;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
-    final int ALTURA = 500;
-    final int LARGURA = 800;
+    final int ALTURA = 790;
+    final int LARGURA = 950;
     private final Aplicacao aplicacao;
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
     private CallTableModel tableModel;
     private ImageIcon img;
 
     public TelaPrincipal(Aplicacao aplicacao) {
-//        try {
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//        } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
-//        
-//        }
-        
+       
         try {
             javax.swing.UIManager.LookAndFeelInfo[] installedLookAndFeels=javax.swing.UIManager.getInstalledLookAndFeels();
             for (int idx=0; idx<installedLookAndFeels.length; idx++)
@@ -47,8 +42,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         
         initComponents();
-        img = new ImageIcon("images/asterisk-icon.png");
-        this.setIconImage(img.getImage());
         this.setCampos();
         this.aplicacao = aplicacao;
         this.mostraTabelaChannels();
@@ -275,9 +268,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jpEvents.setLayout(jpEventsLayout);
         jpEventsLayout.setHorizontalGroup(
             jpEventsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEventsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(139, Short.MAX_VALUE)
                 .addComponent(jbClearEvents)
                 .addGap(133, 133, 133))
         );
@@ -426,22 +419,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jpStatus.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jpStatus.setMaximumSize(new java.awt.Dimension(846, 40));
 
         javax.swing.GroupLayout jpStatusLayout = new javax.swing.GroupLayout(jpStatus);
         jpStatus.setLayout(jpStatusLayout);
         jpStatusLayout.setHorizontalGroup(
             jpStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpStatusLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jpStatusLayout.setVerticalGroup(
             jpStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpStatusLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jlConnection)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
         jpTable.setBorder(javax.swing.BorderFactory.createTitledBorder("Channels"));
@@ -509,7 +497,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                         .addComponent(jcbSMS, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jcbConfirmation)))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGap(0, 58, Short.MAX_VALUE))
                             .addComponent(jpSocketConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -536,7 +524,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jpStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jpStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jmTestes.setMnemonic('T');
@@ -585,15 +574,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(38, 38, 38))
         );
 
@@ -612,65 +601,28 @@ public class TelaPrincipal extends javax.swing.JFrame {
         aplicacao.teste("A");
     }//GEN-LAST:event_jmiAsteriskActionPerformed
 
-    private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
-        System.out.println("presionou");
-    }//GEN-LAST:event_jtfChannelActionPerformed
-
-    private void jbConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConnectActionPerformed
-        conteudo.setServerIp(jtfServerIP.getText());
-        conteudo.setServerPort(Integer.parseInt(jtfServerPort.getText()));
-        conteudo.setUser(jtfUser.getText());
-        conteudo.setPassword(jtfPassword.getText());
-                
-        try {
-            if (aplicacao.onConnect()) {
-                this.setCampos();
-                jbDisconnect.setEnabled(true);
-                jbConnect.setEnabled(false);
-                jbCall.setEnabled(true);
-                jtaEvents.setEnabled(true);
-                jbClearEvents.setEnabled(true);
+    private void jtChannelsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtChannelsKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        if(keyCode == 127) {
+            System.out.println("Pressionou o delete");
+            int ret = JOptionPane.showConfirmDialog(null, "Deseja realmente finalizar a ligação?");
+            switch (ret) {
+                case 0:
+                System.out.println("Sim");
+                tableModel.onRemove(jtChannels.getSelectedRow());
+                break;
+                case 1:
+                System.out.println("Não");
+                break;
+                case 2:
+                System.out.println("Cancelar");
+                break;
             }
-        } catch (IOException ex) {
-            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }      
-        
-    }//GEN-LAST:event_jbConnectActionPerformed
-
-    
-    private void jbDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDisconnectActionPerformed
-        aplicacao.onDisconnect();
-        this.setCampos();
-        jbDisconnect.setEnabled(false);
-        jbConnect.setEnabled(true);
-    }//GEN-LAST:event_jbDisconnectActionPerformed
-
-    private void jbPingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPingActionPerformed
-        if (!aplicacao.sendPing()) {
-            System.out.println("error");
         } else {
-            this.setCampos();
+            JOptionPane.showMessageDialog(null, "Para desligar a ligação, pressione o 'Delete'");
         }
-    }//GEN-LAST:event_jbPingActionPerformed
-
-    private void jbCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCallActionPerformed
-        conteudo.setNumber(jtfNumber.getText());
-        conteudo.setChannel(jtfChannel.getText());
-        conteudo.setContext(jtfContext.getText());
-        if (aplicacao.onCall()){            
-            jbHangup.setEnabled(true);
-        }
-    }//GEN-LAST:event_jbCallActionPerformed
-
-    private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
-        int i = jtChannels.getSelectedRow();
-        String actionID = jtChannels.getValueAt(i, 0).toString();
-        String channel  = jtChannels.getValueAt(i, 1).toString();
-        
-        if (aplicacao.hangUp(actionID, channel)){
-            tableModel.onRemove(i);
-        }
-    }//GEN-LAST:event_jbHangupActionPerformed
+    }//GEN-LAST:event_jtChannelsKeyPressed
 
     private void jcbSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSMSActionPerformed
         if (jcbSMS.isSelected()) {
@@ -688,12 +640,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
             jtaSMS.setText(null);
             jcbConfirmation.setEnabled(false);
         }
-       
+
     }//GEN-LAST:event_jcbSMSActionPerformed
 
     private void jcbSMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbSMSItemStateChanged
         aplicacao.cbSMSischanged();
     }//GEN-LAST:event_jcbSMSItemStateChanged
+
+    private void jbClearSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearSMSActionPerformed
+        jtaSMS.setText(null);
+    }//GEN-LAST:event_jbClearSMSActionPerformed
 
     private void jbSendSmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendSmsActionPerformed
         conteudo.setSmsText(jtaSMS.getText());
@@ -703,39 +659,72 @@ public class TelaPrincipal extends javax.swing.JFrame {
         aplicacao.sendSms();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
-    private void jbClearSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearSMSActionPerformed
-        jtaSMS.setText(null);
-    }//GEN-LAST:event_jbClearSMSActionPerformed
+    private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
+        int i = jtChannels.getSelectedRow();
+        String actionID = jtChannels.getValueAt(i, 0).toString();
+        String channel  = jtChannels.getValueAt(i, 1).toString();
+
+        if (aplicacao.hangUp(actionID, channel)){
+            tableModel.onRemove(i);
+        }
+    }//GEN-LAST:event_jbHangupActionPerformed
+
+    private void jbCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCallActionPerformed
+        conteudo.setNumber(jtfNumber.getText());
+        conteudo.setChannel(jtfChannel.getText());
+        conteudo.setContext(jtfContext.getText());
+        if (aplicacao.onCall()){
+            jbHangup.setEnabled(true);
+        }
+    }//GEN-LAST:event_jbCallActionPerformed
+
+    private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
+        System.out.println("presionou");
+    }//GEN-LAST:event_jtfChannelActionPerformed
 
     private void jbClearEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearEventsActionPerformed
         //jtaEvents.setSmsText(null);
         aplicacao.changeInfo("");
-        
+
     }//GEN-LAST:event_jbClearEventsActionPerformed
 
-    private void jtChannelsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtChannelsKeyPressed
-        // TODO add your handling code here:
-        int keyCode = evt.getKeyCode();
-        if(keyCode == 127) {
-            System.out.println("Pressionou o delete");
-            int ret = JOptionPane.showConfirmDialog(null, "Deseja realmente finalizar a ligação?");
-            switch (ret) {
-                case 0:
-                    System.out.println("Sim");
-                    tableModel.onRemove(jtChannels.getSelectedRow());
-                    break;
-                case 1:
-                    System.out.println("Não");
-                    break;
-                case 2:
-                    System.out.println("Cancelar");
-                    break;
-            }            
-        } else {
-            JOptionPane.showMessageDialog(null, "Para desligar a ligação, pressione o 'Delete'");
-        }
-    }//GEN-LAST:event_jtChannelsKeyPressed
+    private void jbDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDisconnectActionPerformed
+        aplicacao.onDisconnect();
+        this.setCampos();
+        jbDisconnect.setEnabled(false);
+        jbConnect.setEnabled(true);
+    }//GEN-LAST:event_jbDisconnectActionPerformed
 
+    private void jbPingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPingActionPerformed
+        if (!aplicacao.sendPing()) {
+            System.out.println("error");
+        } else {
+            this.setCampos();
+        }
+    }//GEN-LAST:event_jbPingActionPerformed
+
+    private void jbConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConnectActionPerformed
+        conteudo.setServerIp(jtfServerIP.getText());
+        conteudo.setServerPort(Integer.parseInt(jtfServerPort.getText()));
+        conteudo.setUser(jtfUser.getText());
+        conteudo.setPassword(jtfPassword.getText());
+
+        try {
+            if (aplicacao.onConnect()) {
+                this.setCampos();
+                jbDisconnect.setEnabled(true);
+                jbConnect.setEnabled(false);
+                jbCall.setEnabled(true);
+                jtaEvents.setEnabled(true);
+                jbClearEvents.setEnabled(true);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jbConnectActionPerformed
+
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
         Object[] options = {"Sim", "N�o"};
         int opcao = JOptionPane.showOptionDialog(this, "Deseja mesmo sair?", "Confirma��o de sa�da",
