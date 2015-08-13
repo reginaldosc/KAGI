@@ -66,11 +66,11 @@ public class Aplicacao {
      * Creates a new instance of Aplicacao
      */
     public Aplicacao() {
-        //this.p_Response = "";
+        
         telaPrincipal.setIconImage(null);
         telaPrincipal.habilitaCampos();
         telaPrincipal.mostraTela(true);
-        //this.montaTabela(new String[]{"1","2"});
+        telaPrincipal.mostraTela(false);
     }
 
     /* mostra a tela - Sobre */
