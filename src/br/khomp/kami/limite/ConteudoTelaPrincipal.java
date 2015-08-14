@@ -7,15 +7,16 @@
  * and open the template in the editor.
  */
 
-package br.khomp.kami.reginaldo.limite;
+package br.khomp.kami.limite;
 
-import br.khomp.kami.reginaldo.entidade.Call;
+import br.khomp.kami.controle.Aplicacao;
+import br.khomp.kami.entidade.Call;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- *@author  Reginaldo Gon�alves
+ *@author  Reginaldo Goncalves
  * 
  */
 
@@ -63,6 +64,7 @@ public class ConteudoTelaPrincipal {
         //if(!aux.equals("")) {
             this.eventText = aux + "\n" + eventText;
         //}
+            
     }
     
     public String getEventText() {

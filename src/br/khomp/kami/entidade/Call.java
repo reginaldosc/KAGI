@@ -1,4 +1,4 @@
-package br.khomp.kami.reginaldo.entidade;
+package br.khomp.kami.entidade;
 
 
 public class Call {

@@ -7,7 +7,7 @@
  * and open the template in the editor.
  */
 
-package br.khomp.kami.reginaldo.controle;
+package br.khomp.kami.controle;
 
 
 /**

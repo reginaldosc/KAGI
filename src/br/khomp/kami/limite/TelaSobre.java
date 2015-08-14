@@ -4,7 +4,7 @@
  * Created on 1 de Agosto de 2015
  */
 
-package br.khomp.kami.reginaldo.limite;
+package br.khomp.kami.limite;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -44,7 +44,7 @@ public class TelaSobre extends javax.swing.JDialog {
         jbOKsobre = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("br/khomp/kami/reginaldo/limite/Bundle"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("br/khomp/kami/limite/Bundle"); // NOI18N
         setTitle(bundle.getString("TelaSobre.title")); // NOI18N
         setIconImage(null);
         setIconImages(null);
