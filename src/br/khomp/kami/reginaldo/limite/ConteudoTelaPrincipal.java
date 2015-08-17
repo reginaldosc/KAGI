@@ -12,6 +12,7 @@ package br.khomp.kami.reginaldo.limite;
 import br.khomp.kami.reginaldo.entidade.Call;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  *
@@ -19,7 +20,7 @@ import java.util.List;
  * 
  */
 
-public class ConteudoTelaPrincipal {
+public class ConteudoTelaPrincipal extends Observable {
     
     private String      channel     = "b0c0";    
     private String      number      = "84279344";
@@ -27,7 +28,7 @@ public class ConteudoTelaPrincipal {
     private boolean     confirmation;
     private String      smsText     = "olá!";
     private String      context     = "default";
-    private String      serverIp    = "10.5.0.9";
+    private String      serverIp    = "10.5.0.17";
     private int         serverPort  = 5038;    
     private String      user        = "khomp";
     private String      password    = "betinho";
@@ -60,9 +61,12 @@ public class ConteudoTelaPrincipal {
             this.eventText = eventText;
         }
         String aux = this.getEventText() + "";
-        //if(!aux.equals("")) {
-            this.eventText = aux + "\n" + eventText;
-        //}
+        this.eventText = aux + "\n" + eventText;
+        
+        //Notifica TelaPrincipal que chegou um evento
+        setChanged();
+        notifyObservers();
+        
     }
     
     public String getEventText() {

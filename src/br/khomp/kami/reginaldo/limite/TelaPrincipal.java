@@ -11,6 +11,8 @@ import java.awt.Toolkit;
 import br.khomp.kami.reginaldo.controle.Aplicacao;
 import br.khomp.kami.reginaldo.controle.CallTableModel;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,13 +20,14 @@ import java.util.logging.Logger;
  *
  * @author Reginaldo Goncalves
  */
-public class TelaPrincipal extends javax.swing.JFrame {
+public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
     final int ALTURA = 500;
     final int LARGURA = 800;
     private final Aplicacao aplicacao;
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
     private CallTableModel tableModel;
+    private Observable observador;
 
     public TelaPrincipal(Aplicacao aplicacao) {
         try {
@@ -40,8 +43,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setLocation(screenSize.width / 2 - LARGURA / 2,// Centraliza o Frame Principal no meio da Tela
                 screenSize.height / 2 - ALTURA / 2);// r
         setSize(LARGURA, ALTURA);//determina o Tamanho da tela Principa
+        
+        setObervador();
+        
     }
-
+    
+    private void setObervador(){
+        this.observador = conteudo;
+        this.observador.addObserver(this);
+    }
+    
     public void mostraTela(Boolean mostra) {
         this.setVisible(mostra);
         if (mostra == false) {
@@ -605,7 +616,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setPassword(jtfPassword.getText());
                 
         try {
-            if (aplicacao.onConnect()) {
+//            if (aplicacao.onConnect()) {
+            if (aplicacao.connect()) {
                 this.setCampos();
                 jbDisconnect.setEnabled(true);
                 jbConnect.setEnabled(false);
@@ -799,6 +811,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setEventText(txtEvents);
         //jtaEvents.setSmsText(conteudo.getEventText() + "\n");
         
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        jtaEvents.setText(conteudo.getEventText());
     }
 
 }
