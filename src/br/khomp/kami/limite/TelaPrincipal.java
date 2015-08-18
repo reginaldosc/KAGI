@@ -533,7 +533,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jmTestes.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
 
         jmiAsterisk.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
-        jmiAsterisk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/asterisk-icon.png"))); // NOI18N
+        jmiAsterisk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/khomp/kami/images/asterisk-icon.png"))); // NOI18N
         jmiAsterisk.setMnemonic('A');
         jmiAsterisk.setText("Asterisk");
         jmiAsterisk.setToolTipText("");
@@ -545,7 +545,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jmTestes.add(jmiAsterisk);
 
         jmiFreeSwitch.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
-        jmiFreeSwitch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fs64_tiny.png"))); // NOI18N
+        jmiFreeSwitch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/khomp/kami/images/fs64_tiny.png"))); // NOI18N
         jmiFreeSwitch.setMnemonic('F');
         jmiFreeSwitch.setText("FreeSwitch");
         jmiFreeSwitch.addActionListener(new java.awt.event.ActionListener() {
