@@ -18,7 +18,7 @@ public class NewSMSConfirmation extends AbstractNewSMSConfirmation implements In
     public NewSMSConfirmation(Object source) {
         super(source);
     }
-   
+    
     
     @Override
     public List<String> getAll() {

@@ -18,7 +18,7 @@ public class AlarmClear extends AbstractAlarmClear implements InterfaceEvento{
     public AlarmClear(Object source) {
         super(source);
     }
-
+    
 
     @Override
     public List<String> getAll() {

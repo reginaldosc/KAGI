@@ -19,7 +19,7 @@ public class Alarm extends AbstractAlarm implements InterfaceEvento{
         super(source);
     }
         
-    
+
     @Override
     public List<String> getAll() {
         List<String> lista;

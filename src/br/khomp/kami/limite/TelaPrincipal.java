@@ -11,6 +11,8 @@ import java.awt.Toolkit;
 import br.khomp.kami.controle.Aplicacao;
 import br.khomp.kami.controle.CallTableModel;
 import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,29 +20,20 @@ import java.util.logging.Logger;
  *
  * @author Reginaldo Goncalves
  */
-public class TelaPrincipal extends javax.swing.JFrame {
+public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
-    final int ALTURA = 790;
-    final int LARGURA = 950;
+    final int ALTURA = 500;
+    final int LARGURA = 800;
     private final Aplicacao aplicacao;
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
     private CallTableModel tableModel;
-    private ImageIcon img;
+    private Observable observador;
 
     public TelaPrincipal(Aplicacao aplicacao) {
-       
         try {
-            javax.swing.UIManager.LookAndFeelInfo[] installedLookAndFeels=javax.swing.UIManager.getInstalledLookAndFeels();
-            for (int idx=0; idx<installedLookAndFeels.length; idx++)
-                if ("Nimbus".equals(installedLookAndFeels[idx].getName())) {
-                    javax.swing.UIManager.setLookAndFeel(installedLookAndFeels[idx].getClassName());
-                    break;
-                }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
         }
-        
-        
         initComponents();
         this.setCampos();
         this.aplicacao = aplicacao;
@@ -50,8 +43,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setLocation(screenSize.width / 2 - LARGURA / 2,// Centraliza o Frame Principal no meio da Tela
                 screenSize.height / 2 - ALTURA / 2);// r
         setSize(LARGURA, ALTURA);//determina o Tamanho da tela Principa
+        
+        setObervador();
+        
     }
-
+    
+    private void setObervador(){
+        this.observador = conteudo;
+        this.observador.addObserver(this);
+    }
+    
     public void mostraTela(Boolean mostra) {
         this.setVisible(mostra);
         if (mostra == false) {
@@ -153,7 +154,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KAMI");
-        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setIconImages(null);
         setMinimumSize(new java.awt.Dimension(875, 690));
         setName("jfPrincipal"); // NOI18N
@@ -268,9 +268,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jpEvents.setLayout(jpEventsLayout);
         jpEventsLayout.setHorizontalGroup(
             jpEventsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpEventsLayout.createSequentialGroup()
-                .addContainerGap(139, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jbClearEvents)
                 .addGap(133, 133, 133))
         );
@@ -419,17 +419,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jpStatus.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-        jpStatus.setMaximumSize(new java.awt.Dimension(846, 40));
 
         javax.swing.GroupLayout jpStatusLayout = new javax.swing.GroupLayout(jpStatus);
         jpStatus.setLayout(jpStatusLayout);
         jpStatusLayout.setHorizontalGroup(
             jpStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jpStatusLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 822, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jpStatusLayout.setVerticalGroup(
             jpStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jlConnection, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addGroup(jpStatusLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jlConnection)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jpTable.setBorder(javax.swing.BorderFactory.createTitledBorder("Channels"));
@@ -497,7 +502,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                                         .addComponent(jcbSMS, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jcbConfirmation)))
-                                .addGap(0, 58, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jpSocketConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jpEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -524,8 +529,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jpStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(jpStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jmTestes.setMnemonic('T');
@@ -533,7 +537,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jmTestes.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
 
         jmiAsterisk.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
-        jmiAsterisk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/khomp/kami/images/asterisk-icon.png"))); // NOI18N
+        jmiAsterisk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/asterisk-icon.png"))); // NOI18N
         jmiAsterisk.setMnemonic('A');
         jmiAsterisk.setText("Asterisk");
         jmiAsterisk.setToolTipText("");
@@ -545,7 +549,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jmTestes.add(jmiAsterisk);
 
         jmiFreeSwitch.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 11)); // NOI18N
-        jmiFreeSwitch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/khomp/kami/images/fs64_tiny.png"))); // NOI18N
+        jmiFreeSwitch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fs64_tiny.png"))); // NOI18N
         jmiFreeSwitch.setMnemonic('F');
         jmiFreeSwitch.setText("FreeSwitch");
         jmiFreeSwitch.addActionListener(new java.awt.event.ActionListener() {
@@ -574,15 +578,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38))
         );
 
@@ -601,28 +605,66 @@ public class TelaPrincipal extends javax.swing.JFrame {
         aplicacao.teste("A");
     }//GEN-LAST:event_jmiAsteriskActionPerformed
 
-    private void jtChannelsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtChannelsKeyPressed
-        // TODO add your handling code here:
-        int keyCode = evt.getKeyCode();
-        if(keyCode == 127) {
-            System.out.println("Pressionou o delete");
-            int ret = JOptionPane.showConfirmDialog(null, "Deseja realmente finalizar a ligação?");
-            switch (ret) {
-                case 0:
-                System.out.println("Sim");
-                tableModel.onRemove(jtChannels.getSelectedRow());
-                break;
-                case 1:
-                System.out.println("Não");
-                break;
-                case 2:
-                System.out.println("Cancelar");
-                break;
+    private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
+        System.out.println("presionou");
+    }//GEN-LAST:event_jtfChannelActionPerformed
+
+    private void jbConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConnectActionPerformed
+        conteudo.setServerIp(jtfServerIP.getText());
+        conteudo.setServerPort(Integer.parseInt(jtfServerPort.getText()));
+        conteudo.setUser(jtfUser.getText());
+        conteudo.setPassword(jtfPassword.getText());
+                
+        try {
+//            if (aplicacao.onConnect()) {
+            if (aplicacao.connect()) {
+                this.setCampos();
+                jbDisconnect.setEnabled(true);
+                jbConnect.setEnabled(false);
+                jbCall.setEnabled(true);
+                jtaEvents.setEnabled(true);
+                jbClearEvents.setEnabled(true);
             }
+        } catch (IOException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }      
+        
+    }//GEN-LAST:event_jbConnectActionPerformed
+
+    
+    private void jbDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDisconnectActionPerformed
+        aplicacao.onDisconnect();
+        this.setCampos();
+        jbDisconnect.setEnabled(false);
+        jbConnect.setEnabled(true);
+    }//GEN-LAST:event_jbDisconnectActionPerformed
+
+    private void jbPingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPingActionPerformed
+        if (!aplicacao.sendPing()) {
+            System.out.println("error");
         } else {
-            JOptionPane.showMessageDialog(null, "Para desligar a ligação, pressione o 'Delete'");
+            this.setCampos();
         }
-    }//GEN-LAST:event_jtChannelsKeyPressed
+    }//GEN-LAST:event_jbPingActionPerformed
+
+    private void jbCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCallActionPerformed
+        conteudo.setNumber(jtfNumber.getText());
+        conteudo.setChannel(jtfChannel.getText());
+        conteudo.setContext(jtfContext.getText());
+        if (aplicacao.onCall()){            
+            jbHangup.setEnabled(true);
+        }
+    }//GEN-LAST:event_jbCallActionPerformed
+
+    private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
+        int i = jtChannels.getSelectedRow();
+        String actionID = jtChannels.getValueAt(i, 0).toString();
+        String channel  = jtChannels.getValueAt(i, 1).toString();
+        
+        if (aplicacao.hangUp(actionID, channel)){
+            tableModel.onRemove(i);
+        }
+    }//GEN-LAST:event_jbHangupActionPerformed
 
     private void jcbSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbSMSActionPerformed
         if (jcbSMS.isSelected()) {
@@ -640,16 +682,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
             jtaSMS.setText(null);
             jcbConfirmation.setEnabled(false);
         }
-
+       
     }//GEN-LAST:event_jcbSMSActionPerformed
 
     private void jcbSMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbSMSItemStateChanged
         aplicacao.cbSMSischanged();
     }//GEN-LAST:event_jcbSMSItemStateChanged
-
-    private void jbClearSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearSMSActionPerformed
-        jtaSMS.setText(null);
-    }//GEN-LAST:event_jbClearSMSActionPerformed
 
     private void jbSendSmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendSmsActionPerformed
         conteudo.setSmsText(jtaSMS.getText());
@@ -659,72 +697,39 @@ public class TelaPrincipal extends javax.swing.JFrame {
         aplicacao.sendSms();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
-    private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
-        int i = jtChannels.getSelectedRow();
-        String actionID = jtChannels.getValueAt(i, 0).toString();
-        String channel  = jtChannels.getValueAt(i, 1).toString();
-
-        if (aplicacao.hangUp(actionID, channel)){
-            tableModel.onRemove(i);
-        }
-    }//GEN-LAST:event_jbHangupActionPerformed
-
-    private void jbCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCallActionPerformed
-        conteudo.setNumber(jtfNumber.getText());
-        conteudo.setChannel(jtfChannel.getText());
-        conteudo.setContext(jtfContext.getText());
-        if (aplicacao.onCall()){
-            jbHangup.setEnabled(true);
-        }
-    }//GEN-LAST:event_jbCallActionPerformed
-
-    private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
-        System.out.println("presionou");
-    }//GEN-LAST:event_jtfChannelActionPerformed
+    private void jbClearSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearSMSActionPerformed
+        jtaSMS.setText(null);
+    }//GEN-LAST:event_jbClearSMSActionPerformed
 
     private void jbClearEventsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearEventsActionPerformed
         //jtaEvents.setSmsText(null);
         aplicacao.changeInfo("");
-
+        
     }//GEN-LAST:event_jbClearEventsActionPerformed
 
-    private void jbDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbDisconnectActionPerformed
-        aplicacao.onDisconnect();
-        this.setCampos();
-        jbDisconnect.setEnabled(false);
-        jbConnect.setEnabled(true);
-    }//GEN-LAST:event_jbDisconnectActionPerformed
-
-    private void jbPingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbPingActionPerformed
-        if (!aplicacao.sendPing()) {
-            System.out.println("error");
+    private void jtChannelsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtChannelsKeyPressed
+        // TODO add your handling code here:
+        int keyCode = evt.getKeyCode();
+        if(keyCode == 127) {
+            System.out.println("Pressionou o delete");
+            int ret = JOptionPane.showConfirmDialog(null, "Deseja realmente finalizar a ligação?");
+            switch (ret) {
+                case 0:
+                    System.out.println("Sim");
+                    tableModel.onRemove(jtChannels.getSelectedRow());
+                    break;
+                case 1:
+                    System.out.println("Não");
+                    break;
+                case 2:
+                    System.out.println("Cancelar");
+                    break;
+            }            
         } else {
-            this.setCampos();
+            JOptionPane.showMessageDialog(null, "Para desligar a ligação, pressione o 'Delete'");
         }
-    }//GEN-LAST:event_jbPingActionPerformed
+    }//GEN-LAST:event_jtChannelsKeyPressed
 
-    private void jbConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbConnectActionPerformed
-        conteudo.setServerIp(jtfServerIP.getText());
-        conteudo.setServerPort(Integer.parseInt(jtfServerPort.getText()));
-        conteudo.setUser(jtfUser.getText());
-        conteudo.setPassword(jtfPassword.getText());
-
-        try {
-            if (aplicacao.onConnect()) {
-                this.setCampos();
-                jbDisconnect.setEnabled(true);
-                jbConnect.setEnabled(false);
-                jbCall.setEnabled(true);
-                jtaEvents.setEnabled(true);
-                jbClearEvents.setEnabled(true);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_jbConnectActionPerformed
-
-    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
         Object[] options = {"Sim", "N�o"};
         int opcao = JOptionPane.showOptionDialog(this, "Deseja mesmo sair?", "Confirma��o de sa�da",
@@ -806,6 +811,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         conteudo.setEventText(txtEvents);
         //jtaEvents.setSmsText(conteudo.getEventText() + "\n");
         
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        jtaEvents.setText(conteudo.getEventText());
     }
 
 }

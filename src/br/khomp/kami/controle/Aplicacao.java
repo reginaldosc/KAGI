@@ -8,6 +8,22 @@
 package br.khomp.kami.controle;
 
 import br.khomp.kami.entidade.Call;
+import br.khomp.kami.evento.Alarm;
+import br.khomp.kami.evento.AlarmClear;
+import br.khomp.kami.evento.AnswerInfo;
+import br.khomp.kami.evento.AntennaLevel;
+import br.khomp.kami.evento.BranchOffHook;
+import br.khomp.kami.evento.BranchOnHook;
+import br.khomp.kami.evento.CollectCall;
+import br.khomp.kami.evento.InterfaceEvento;
+import br.khomp.kami.evento.KDisconnectionCause;
+import br.khomp.kami.evento.NewSMS;
+import br.khomp.kami.evento.NewSMSBroadcast;
+import br.khomp.kami.evento.NewSMSConfirmation;
+import br.khomp.kami.evento.NewUSSD;
+import br.khomp.kami.evento.OperatorRegistry;
+import br.khomp.kami.evento.SIMSelectionFinished;
+import br.khomp.kami.evento.Transfered;
 import br.khomp.kami.limite.ConteudoTelaPrincipal;
 import br.khomp.kami.limite.TelaPrincipal;
 import br.khomp.kami.limite.TelaSobre;
@@ -23,22 +39,32 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.asteriskjava.manager.AuthenticationFailedException;
+import org.asteriskjava.manager.ManagerConnection;
+import org.asteriskjava.manager.ManagerConnectionFactory;
+import org.asteriskjava.manager.ManagerEventListener;
+import org.asteriskjava.manager.TimeoutException;
+import org.asteriskjava.manager.event.ManagerEvent;
 
 /**
  *
  * @author Reginaldo Goncalves
  */
-public class Aplicacao {
+public class Aplicacao implements ManagerEventListener {
 
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    public int choosenTest = 0;
+    //private String[] list = new String[4];
 
     private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
     //private final String p_Response;
+    
+      
 
+    private ManagerConnection managerConnection;
+    
     private Socket mySocket;
     private PrintWriter output;
     private BufferedReader input;
@@ -66,11 +92,9 @@ public class Aplicacao {
      * Creates a new instance of Aplicacao
      */
     public Aplicacao() {
-        this.txtEvents = null;
         telaPrincipal.setIconImage(null);
         telaPrincipal.habilitaCampos();
         telaPrincipal.mostraTela(true);
-        //this.montaTabela(new String[]{"1","2"});
     }
 
     /* mostra a tela - Sobre */
@@ -90,21 +114,91 @@ public class Aplicacao {
     public void teste(String teste) {
         switch (teste) {
             case "A":
-                choosenTest = 0;
                 System.out.println("Asterisk test selected.");
                 break;
             case "F":
-                choosenTest = 1;
                 System.out.println("FreeSwitch test selected.");
                 JOptionPane.showMessageDialog(telaPrincipal, "teste não implementado!");
                 break;
             default:
-                choosenTest = -1;
                 System.out.println("Invalid test!");
                 break;
         }
     }
 
+    private void tratarEvento(InterfaceEvento interfaceEvento){
+        for(String str:interfaceEvento.getAll()){
+            conteudo.setEventText(str);
+        }
+    }
+    
+    @Override
+    public void onManagerEvent(ManagerEvent event) {        
+        if(event instanceof InterfaceEvento){
+            tratarEvento((InterfaceEvento)event);
+        }
+    }
+    
+    private void registrarClasses(){
+        this.managerConnection.registerUserEventClass(Alarm.class);
+        this.managerConnection.registerUserEventClass(AlarmClear.class);   
+        this.managerConnection.registerUserEventClass(AnswerInfo.class);   
+        this.managerConnection.registerUserEventClass(AntennaLevel.class);   
+        this.managerConnection.registerUserEventClass(BranchOffHook.class);   
+        this.managerConnection.registerUserEventClass(BranchOnHook.class);   
+        this.managerConnection.registerUserEventClass(CollectCall.class);   
+        this.managerConnection.registerUserEventClass(KDisconnectionCause.class);   
+        this.managerConnection.registerUserEventClass(NewSMS.class);   
+        this.managerConnection.registerUserEventClass(NewSMSBroadcast.class);   
+        this.managerConnection.registerUserEventClass(NewSMSConfirmation.class);   
+        this.managerConnection.registerUserEventClass(NewUSSD.class);   
+        this.managerConnection.registerUserEventClass(OperatorRegistry.class);   
+        this.managerConnection.registerUserEventClass(SIMSelectionFinished.class);   
+        this.managerConnection.registerUserEventClass(Transfered.class);   
+    }
+    
+    public boolean connect() throws IOException{
+        /* variaveis locais */
+        ip = conteudo.getServerIp();
+        port = conteudo.getServerPort();
+        user = conteudo.getUser();
+        password = conteudo.getPassword();
+        
+        ManagerConnectionFactory factory = new ManagerConnectionFactory(
+                        ip, user, password);
+
+        this.managerConnection = factory.createManagerConnection();
+        //registro para efentos
+        this.managerConnection.addEventListener(this);
+        
+                
+        txtEvents = "Trying Connection to: " + ip + ":" + port;
+        conteudo.setJlConnection(txtEvents);
+        telaPrincipal.changeJlConnection();
+        this.changeInfo(txtEvents);
+     
+        try {
+            //efetiva login
+            this.managerConnection.login();
+            
+        } catch (IllegalStateException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AuthenticationFailedException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TimeoutException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(this.managerConnection.getState() == this.managerConnection.getState().CONNECTED){
+            registrarClasses();
+            txtEvents = "Connected on: " + ip + ":" + port;
+            conteudo.setJlConnection(txtEvents);
+            this.changeInfo(txtEvents);
+        }
+           
+        return true;
+    }
+    
     /* Chamada ao apertar o botão Login na tela Principal */
     /**
      * 
@@ -131,8 +225,10 @@ public class Aplicacao {
         sockaddr = new InetSocketAddress(ip, port);
 
         try {
+            //new Eventos(ip, user, password).run();
+            
             mySocket.connect(sockaddr, timeout);
-
+            
         } catch (Exception e) {
             System.out.println("Exception while creating socket,Reason is:" + e.getMessage());
         }
@@ -256,6 +352,7 @@ public class Aplicacao {
 
                     conteudo.setTabela(call);
                 }
+                //this.changeInfo();
                 telaPrincipal.mostraTabelaChannels();
             }
         } else {
@@ -308,7 +405,6 @@ public class Aplicacao {
      * Destination:
      * Confirmation:
      * Message:
-     * @return 
      **/ 
     public boolean sendSms() {
 
