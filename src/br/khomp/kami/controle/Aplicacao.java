@@ -308,6 +308,7 @@ public class Aplicacao {
      * Destination:
      * Confirmation:
      * Message:
+     * @return 
      **/ 
     public boolean sendSms() {
 
