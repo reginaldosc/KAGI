@@ -734,7 +734,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         conteudo.setChannel(jtfChannel.getText());
         conteudo.setNumber(jtfNumber.getText());
         conteudo.setConfirmation(jcbConfirmation.isSelected());
-        boolean sendSms = aplicacao.sendSms();
+//        boolean sendSms = aplicacao.sendSms();
+        boolean sendSms = aplicacao.sendSMS();
     }//GEN-LAST:event_jbSendSmsActionPerformed
 
     private void jbClearSMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClearSMSActionPerformed

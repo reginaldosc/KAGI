@@ -8,6 +8,7 @@
 package br.khomp.kami.controle;
 
 import br.khomp.kami.entidade.Call;
+import br.khomp.kami.entidade.SendSMSAction;
 import br.khomp.kami.evento.*;
 import br.khomp.kami.limite.ConteudoTelaPrincipal;
 import br.khomp.kami.limite.TelaPrincipal;
@@ -369,6 +370,27 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
     public void cbSMSischanged() {
 
     }
+    
+    public boolean sendSMS(){
+        SendSMSAction action;
+        action = new SendSMSAction();
+        
+        action.setDevice(conteudo.getChannel());
+        action.setDestination(conteudo.getNumber());
+        action.setMessage(conteudo.getSmsText());
+        
+        try {
+            managerConnection.sendAction(action, this);
+        } catch (IOException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalStateException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return true;
+    }
 
     /**
      * Action: KSendSMS
@@ -395,7 +417,8 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         
         OriginateAction originateSmsAction;
         SendActionCallback sendCB = this;
-
+        
+        
        originateSmsAction = new OriginateAction();
 
 
@@ -408,7 +431,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
                                 + "Message: " + text + CRLF
                                 + "Confirmation: " + confirmation + CRLF + CRLF);
            
-            originateSmsAction.setActionId(String.valueOf(actID));
+//            originateSmsAction.setActionId(String.valueOf(actID));
 
             if (tech.equalsIgnoreCase("Khomp")) {
                 originateSmsAction.setVariable("Message", text);
@@ -419,6 +442,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
             }
 
             originateSmsAction.setContext(context);
+            originateSmsAction.setActionId("KSendSMS");
             originateSmsAction.setPriority(1);
             originateSmsAction.setExten(number);
 
