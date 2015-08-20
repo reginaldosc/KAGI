@@ -8,31 +8,14 @@
 package br.khomp.kami.controle;
 
 import br.khomp.kami.entidade.Call;
-import br.khomp.kami.evento.Alarm;
-import br.khomp.kami.evento.AlarmClear;
-import br.khomp.kami.evento.AnswerInfo;
-import br.khomp.kami.evento.AntennaLevel;
-import br.khomp.kami.evento.BranchOffHook;
-import br.khomp.kami.evento.BranchOnHook;
-import br.khomp.kami.evento.CollectCall;
-import br.khomp.kami.evento.InterfaceEvento;
-import br.khomp.kami.evento.KDisconnectionCause;
-import br.khomp.kami.evento.NewSMS;
-import br.khomp.kami.evento.NewSMSBroadcast;
-import br.khomp.kami.evento.NewSMSConfirmation;
-import br.khomp.kami.evento.NewUSSD;
-import br.khomp.kami.evento.OperatorRegistry;
-import br.khomp.kami.evento.SIMSelectionFinished;
-import br.khomp.kami.evento.Transfered;
+import br.khomp.kami.evento.*;
 import br.khomp.kami.limite.ConteudoTelaPrincipal;
 import br.khomp.kami.limite.TelaPrincipal;
 import br.khomp.kami.limite.TelaSobre;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.StringTokenizer;
@@ -42,34 +25,47 @@ import javax.swing.JOptionPane;
 import org.asteriskjava.manager.AuthenticationFailedException;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
+import org.asteriskjava.manager.ManagerConnectionState;
 import org.asteriskjava.manager.ManagerEventListener;
+import org.asteriskjava.manager.SendActionCallback;
 import org.asteriskjava.manager.TimeoutException;
+import org.asteriskjava.manager.action.HangupAction;
+import org.asteriskjava.manager.action.ManagerAction;
+import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.event.ManagerEvent;
+import org.asteriskjava.manager.response.ManagerResponse;
 
 /**
  *
  * @author Reginaldo Goncalves
  */
-public class Aplicacao implements ManagerEventListener {
+public class Aplicacao implements ManagerEventListener, SendActionCallback {
 
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    //private String[] list = new String[4];
-
     private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
-    //private final String p_Response;
-    
-      
-
     private ManagerConnection managerConnection;
-    
+    private ManagerAction managerAction;
     private Socket mySocket;
     private PrintWriter output;
     private BufferedReader input;
     private SocketAddress sockaddr = null;
-    
+
+    @Override
+    public void onResponse(ManagerResponse mr) {
+        String aux;
+        aux = mr.getResponse() + ". " + mr.getMessage();
+        System.out.println("Response: " + aux);
+        conteudo.setEventText(aux);        
+    }
+
+    public void exportLog() {
+        String text = conteudo.getEventText();
+        System.out.println("Logs:\n" + text);
+    }
+     
     private enum CausesEnum { 
         CAUSE_NOTDEFINED("11"),
         CAUSE_NORMAL("12"),
@@ -133,7 +129,8 @@ public class Aplicacao implements ManagerEventListener {
     }
     
     @Override
-    public void onManagerEvent(ManagerEvent event) {        
+    public void onManagerEvent(ManagerEvent event) {
+        System.out.println("evento: "+ event);
         if(event instanceof InterfaceEvento){
             tratarEvento((InterfaceEvento)event);
         }
@@ -157,8 +154,15 @@ public class Aplicacao implements ManagerEventListener {
         this.managerConnection.registerUserEventClass(Transfered.class);   
     }
     
-    public boolean connect() throws IOException{
+    /* Chamada ao apertar o botão Login na tela Principal */
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     */
+    public boolean onConnect() throws IOException{
         /* variaveis locais */
+        boolean back = false;
         ip = conteudo.getServerIp();
         port = conteudo.getServerPort();
         user = conteudo.getUser();
@@ -168,7 +172,7 @@ public class Aplicacao implements ManagerEventListener {
                         ip, user, password);
 
         this.managerConnection = factory.createManagerConnection();
-        //registro para efentos
+        //registro para eventos
         this.managerConnection.addEventListener(this);
         
                 
@@ -180,81 +184,22 @@ public class Aplicacao implements ManagerEventListener {
         try {
             //efetiva login
             this.managerConnection.login();
-            
-        } catch (IllegalStateException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (AuthenticationFailedException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TimeoutException ex) {
+
+        } catch (IllegalStateException | AuthenticationFailedException | TimeoutException ex) {
             Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        if(this.managerConnection.getState() == this.managerConnection.getState().CONNECTED){
+        if(this.managerConnection.getState() == ManagerConnectionState.CONNECTED){
             registrarClasses();
             txtEvents = "Connected on: " + ip + ":" + port;
             conteudo.setJlConnection(txtEvents);
             this.changeInfo(txtEvents);
+            back = true;
         }
            
-        return true;
-    }
-    
-    /* Chamada ao apertar o botão Login na tela Principal */
-    /**
-     * 
-     * @return
-     * @throws IOException 
-     */
-    public boolean onConnect() throws IOException {
-
-        /* variaveis locais */
-        ip = conteudo.getServerIp();
-        port = conteudo.getServerPort();
-        user = conteudo.getUser();
-        password = conteudo.getPassword();
-
-        boolean back = false;
-
-        txtEvents = "Trying Connection to: " + ip + ":" + port;
-        conteudo.setJlConnection(txtEvents);
-        telaPrincipal.changeJlConnection();
-        this.changeInfo(txtEvents);
-
-        /* Cria Socket */
-        mySocket = new Socket();
-        sockaddr = new InetSocketAddress(ip, port);
-
-        try {
-            //new Eventos(ip, user, password).run();
-            
-            mySocket.connect(sockaddr, timeout);
-            
-        } catch (Exception e) {
-            System.out.println("Exception while creating socket,Reason is:" + e.getMessage());
-        }
-
-        String req = ("Action: Login" + CRLF
-                + "Username: " + user + CRLF
-                + "Secret: " + password + CRLF + CRLF);
-
-        this.changeInfo(req);
-
-        if (mySocket.isConnected()) {
-            txtEvents = "Connected on: " + ip + ":" + port;
-
-            conteudo.setJlConnection(txtEvents);
-            this.changeInfo(txtEvents);
-
-            output = new PrintWriter(mySocket.getOutputStream(), true);
-            input = new BufferedReader(new InputStreamReader(mySocket.getInputStream()));
-
-            this.sendData(req);
-            if (this.receiveData(input)) {
-                back = true;
-            }
-        }
         return back;
     }
+        
 
     /* Metodo chamado ao apertar o botão Call na tela Principal */
     /**
@@ -262,22 +207,10 @@ public class Aplicacao implements ManagerEventListener {
      */
     public void onDisconnect() {
 
-        String req = ("Action: Logoff" + CRLF + CRLF);
-        this.changeInfo(req);
-
-        this.sendData(req);
-        if (this.receiveData(input)) {
-            try {
-                output.close();
-                input.close();
-                mySocket.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-            txtEvents = "Disconnected...";
+        if(ManagerConnectionState.CONNECTED == this.managerConnection.getState()){
+            this.managerConnection.logoff();
+            txtEvents = "Disconnected from: " + ip + ":" + port;
             conteudo.setJlConnection(txtEvents);
-            telaPrincipal.changeJlConnection();
-            this.changeInfo(txtEvents);
         }
     }
 
@@ -314,51 +247,74 @@ public class Aplicacao implements ManagerEventListener {
      * 
      * @return 
      */
-    public boolean onCall() {
+    @SuppressWarnings("null")
+    public int onCall() {
 
         String number = conteudo.getNumber();
         String channel = conteudo.getChannel();
         String context = conteudo.getContext();
+        String tech = conteudo.getTech();
         int priority = 1;
-        boolean back = false;
+        int timeOut = 30000;
+        int back = 0;
         int actID = this.actionID + 1;
 
         this.actionID = actID;
 
+        OriginateAction originateAction;
+        SendActionCallback sendCB = this;
+
+        originateAction = new OriginateAction();
+
+
         if (!number.equals("") && !channel.equals("") && !context.equals("")) {
-            String callParam
-                    = ("Action: Originate" + CRLF
-                    + "ActionID: " + actID + CRLF
-                    + "Channel: sip/" + channel + CRLF
-                    + "Context: " + context + CRLF
-                    + "Exten: " + number + CRLF
-                    + "Priority: " + priority + CRLF + CRLF);
+            originateAction.setActionId(String.valueOf(actID));
 
-            this.changeInfo(callParam);
-
-            if (mySocket.isConnected()) {
-                this.sendData(callParam);
-                //this.receiveData(input);
-                System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
-                if (this.receiveData(input)) {
-                    
-                    back = true;
-
-                    // cria e popula objeto call
-                    Call call = new Call();
-                    call.setActionID(Integer.toString(actID));
-                    call.setChannel(channel);
-                    call.setStatus("Connected");
-
-                    conteudo.setTabela(call);
-                }
-                //this.changeInfo();
-                telaPrincipal.mostraTabelaChannels();
+            if (tech.equalsIgnoreCase("Khomp")) {
+                originateAction.setChannel(tech + "/" + channel + "/" + number);
+            } else {
+                originateAction.setChannel(tech + "/" + number);
             }
+            
+            originateAction.setContext(context);
+            originateAction.setExten(number);
+            originateAction.setPriority(priority);
+            originateAction.setTimeout(timeOut);
+            back = 1;
         } else {
             System.out.println("Existem valores em branco!");
+            return back;
         }
 
+        if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+            System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
+            
+            try {
+                managerConnection.sendAction(originateAction, sendCB);   
+            } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            back = -1;
+        }
+
+        String callParam
+                = ("Action: Originate" + CRLF
+                + "ActionID: " + originateAction.getActionId() + CRLF
+                + "Channel: " + originateAction.getChannel() + CRLF
+                + "Context: " + originateAction.getContext() + CRLF
+                + "Exten: " + originateAction.getExten() + CRLF
+                + "Priority: " + originateAction.getPriority() + CRLF + CRLF);
+
+        this.changeInfo(callParam);
+
+        // cria e popula objeto call
+        Call call = new Call();
+        call.setActionID(Integer.toString(actID));
+        call.setChannel(channel);
+        call.setStatus("Connected");
+
+        conteudo.setTabela(call);
         return back;
     }
 
@@ -372,6 +328,8 @@ public class Aplicacao implements ManagerEventListener {
         boolean back = false;
         String cause = "";
 
+        
+        
         String callParam
                 = ("Action: Hangup" + CRLF
                 + "ActionID: " + actionID + CRLF
@@ -379,14 +337,28 @@ public class Aplicacao implements ManagerEventListener {
                 + "Cause: " + cause + CRLF + CRLF);
 
         this.changeInfo(callParam);
+        
+        HangupAction hangupAct;
+        SendActionCallback sendCB = this;
 
-        if (mySocket.isConnected()) {
-            this.sendData(callParam);
-            if(this.receiveData(input)){
-                back = true;
-                System.out.println("Hanging up..." + actionID);
-            }
+        hangupAct = new HangupAction();
+        
+        hangupAct.setActionId(actionID);
+        hangupAct.setChannel(channel);
+        
+        try {
+            managerConnection.sendAction(hangupAct, sendCB);
+        } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+//        if (mySocket.isConnected()) {
+//            this.sendData(callParam);
+//            if(this.receiveData(input)){
+//                back = true;
+//                System.out.println("Hanging up..." + actionID);
+//            }
+//        }
 
         return back;
     }
@@ -405,34 +377,70 @@ public class Aplicacao implements ManagerEventListener {
      * Destination:
      * Confirmation:
      * Message:
+     * @return 
      **/ 
     public boolean sendSms() {
 
-        String channel = conteudo.getChannel();
-        String text = conteudo.getSmsText();
-        String number = conteudo.getNumber();
-        boolean back = false;
-        boolean confirmation = conteudo.getConfirmation();
-        int actID = this.actionID + 1;
+        String channel          = conteudo.getChannel();
+        String text             = conteudo.getSmsText();
+        String number           = conteudo.getNumber();
+        String context          = conteudo.getContext();
+        String tech             = conteudo.getTech();
+        String action           = "KSendSMS"; 
+        boolean back            = false;
+        boolean confirmation    = conteudo.getConfirmation();
+        int actID               = this.actionID + 1;
+        this.actionID           = actID;
+        String smsParam;
+        
+        OriginateAction originateSmsAction;
+        SendActionCallback sendCB = this;
 
-        this.actionID = actID;
-        String smsParam
-                = ("Action: KSendSMS" + CRLF
-                + "ActionID: " + actID + CRLF
-                + "device: " + channel + CRLF
-                + "destination: " + number + CRLF
-                + "Message: " + text + CRLF
-                + "Confirmation: " + confirmation + CRLF + CRLF);
+       originateSmsAction = new OriginateAction();
 
-        this.sendData(smsParam);
-        this.changeInfo(smsParam);
-        if (this.receiveData(input)){
+
+       if (!number.equals("") && !channel.equals("") && !text.equals("")) {
+           
+            smsParam         = ("Action: " + action + CRLF
+                                + "ActionID: " + actID + CRLF
+                                + "device: " + channel + CRLF
+                                + "destination: " + number + CRLF
+                                + "Message: " + text + CRLF
+                                + "Confirmation: " + confirmation + CRLF + CRLF);
+           
+            originateSmsAction.setActionId(String.valueOf(actID));
+
+            if (tech.equalsIgnoreCase("Khomp")) {
+                originateSmsAction.setVariable("Message", text);
+                originateSmsAction.setVariable("Action", action);
+                originateSmsAction.setChannel(tech + "/" + channel + "/" + number);
+            } else {
+                originateSmsAction.setChannel(tech + "/" + number);
+            }
+
+            originateSmsAction.setContext(context);
+            originateSmsAction.setPriority(1);
+            originateSmsAction.setExten(number);
+
             back = true;
-            //this.changeInfo(smsParam);
+       } else {
+            System.out.println("Existem valores em branco!");
+            return back;
         }
 
+        if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+           
+            try {
+                managerConnection.sendAction(originateSmsAction, sendCB);   
+            } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         System.out.println("Sending SMS to " + number);
+        this.changeInfo(smsParam);                
         return back;
+        
+        
     }
 
     /**
@@ -478,6 +486,7 @@ public class Aplicacao implements ManagerEventListener {
         System.out.println(text);
         conteudo.setEventText(text);
         telaPrincipal.setCampos();
-    }
+    }   
+    
 
 }

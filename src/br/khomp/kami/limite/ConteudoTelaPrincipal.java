@@ -22,17 +22,18 @@ import java.util.Observable;
 
 public class ConteudoTelaPrincipal extends Observable {
     
-    private String      channel     = "b0c0";    
+    private String      channel     = "b2c1";    
     private String      number      = "84279344";
     private String      connect;
     private boolean     confirmation;
     private String      smsText     = "olá!";
-    private String      context     = "default";
+    private String      context     = "internal";
     private String      serverIp    = "10.5.0.17";
     private int         serverPort  = 5038;    
     private String      user        = "khomp";
     private String      password    = "betinho";
-    private String      eventText   = "\n";    
+    private String      eventText   = "\n";
+    private String      tech        = "Khomp";
     private final List<Call>  tabela      = new ArrayList<>();
  
     
@@ -70,7 +71,7 @@ public class ConteudoTelaPrincipal extends Observable {
     }
     
     public String getEventText() {
-        return eventText;
+        return this.eventText;
     }
     
     public void setChannel(String channel){
@@ -143,6 +144,20 @@ public class ConteudoTelaPrincipal extends Observable {
     
     public boolean getConfirmation(){
         return confirmation;
+    }
+
+    /**
+     * @return the tech
+     */
+    public String getTech() {
+        return tech;
+    }
+
+    /**
+     * @param tech the tech to set
+     */
+    public void setTech(String tech) {
+        this.tech = tech;
     }
     
     
