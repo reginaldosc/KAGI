@@ -548,10 +548,12 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jRadioButton1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jlTech" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jlNumber" min="-2" max="-2" attributes="0"/>
                                   <Component id="jlChannel" min="-2" max="-2" attributes="0"/>
                                   <Component id="jlContext" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                                      <Component id="jlTech" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jlNumber" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -611,7 +613,7 @@
                     </Component>
                     <Component class="javax.swing.JLabel" name="jlTech">
                       <Properties>
-                        <Property name="text" type="java.lang.String" value="Tech:"/>
+                        <Property name="text" type="java.lang.String" value="Tech: "/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JComboBox" name="jcbTech">

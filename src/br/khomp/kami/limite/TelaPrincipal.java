@@ -434,7 +434,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
         jRadioButton2.setText("Não Restrito");
 
-        jlTech.setText("Tech:");
+        jlTech.setText("Tech: ");
 
         jcbTech.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SIP", "Khomp" }));
         jcbTech.setSelectedIndex(1);
@@ -465,10 +465,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButton1)
-                    .addComponent(jlTech)
-                    .addComponent(jlNumber)
                     .addComponent(jlChannel)
-                    .addComponent(jlContext))
+                    .addComponent(jlContext)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jlTech)
+                        .addComponent(jlNumber)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jtfContext, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
