@@ -8,17 +8,17 @@
 package br.khomp.kami.controle;
 
 import br.khomp.kami.entidade.Call;
-import br.khomp.kami.entidade.SendSMSAction;
+import br.khomp.kami.entidade.KGSMPresentationAction;
+import br.khomp.kami.entidade.KSelectSIMcardAction;
+import br.khomp.kami.entidade.KSendSMSAction;
+import br.khomp.kami.entidade.KSendUSSDAction;
+import br.khomp.kami.entidade.KSendUUIAction;
 import br.khomp.kami.evento.*;
 import br.khomp.kami.limite.ConteudoTelaPrincipal;
 import br.khomp.kami.limite.TelaPrincipal;
 import br.khomp.kami.limite.TelaSobre;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,6 @@ import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.SendActionCallback;
 import org.asteriskjava.manager.TimeoutException;
 import org.asteriskjava.manager.action.HangupAction;
-import org.asteriskjava.manager.action.ManagerAction;
 import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.event.ManagerEvent;
 import org.asteriskjava.manager.response.ManagerResponse;
@@ -45,27 +44,25 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
     private String ip, user, password, txtEvents;
     private int port;
     public int actionID = 0;
-    private static final int timeout = 3000; // timeout para esposta de conexao com o socket
     private static final String CRLF = "\r\n"; // nova linha
     private ManagerConnection managerConnection;
-    private ManagerAction managerAction;
-    private Socket mySocket;
-    private PrintWriter output;
-    private BufferedReader input;
-    private SocketAddress sockaddr = null;
-
+    private static final String QUEUED = "Originate successfully queued";
+    private Call call;
+    
     @Override
     public void onResponse(ManagerResponse mr) {
         String aux;
-        aux = mr.getResponse() + ". " + mr.getMessage();
-        System.out.println("Response: " + aux);
-        conteudo.setEventText(aux);        
+        System.out.println(mr.toString());
+        aux = "Response: " + mr.getResponse() + "\n" +"Message: " + mr.getMessage();
+        System.out.println(aux);
+        conteudo.setEventText(aux);
+        if(mr.getMessage().equalsIgnoreCase(QUEUED)){
+            conteudo.setTabela(call);
+            telaPrincipal.mostraTabelaChannels();
+        }
     }
 
-    public void exportLog() {
-        String text = conteudo.getEventText();
-        System.out.println("Logs:\n" + text);
-    }
+       
      
     private enum CausesEnum { 
         CAUSE_NOTDEFINED("11"),
@@ -84,6 +81,9 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
 
     TelaPrincipal telaPrincipal = new TelaPrincipal(this);
     ConteudoTelaPrincipal conteudo = telaPrincipal.getConteudo();
+    
+    OriginateAction originateSmsAction;
+    SendActionCallback sendCB = this;
 
     /**
      * Creates a new instance of Aplicacao
@@ -263,7 +263,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         this.actionID = actID;
 
         OriginateAction originateAction;
-        SendActionCallback sendCB = this;
+        //SendActionCallback sendCB = this;
 
         originateAction = new OriginateAction();
 
@@ -315,7 +315,8 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         call.setChannel(channel);
         call.setStatus("Connected");
 
-        conteudo.setTabela(call);
+//        conteudo.setTabela(call);
+//        telaPrincipal.mostraTabelaChannels();
         return back;
     }
 
@@ -325,24 +326,19 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
      * @param channel
      * @return 
      */
-    public boolean hangUp(String actionID, String channel) {
+    public boolean kHangUp(String actionID, String channel) {
         boolean back = false;
-        String cause = "";
-
-        
+        String cause = "16";       
         
         String callParam
-                = ("Action: Hangup" + CRLF
+                = ("Action: kHangup" + CRLF
                 + "ActionID: " + actionID + CRLF
                 + "Channel: " + channel + CRLF
                 + "Cause: " + cause + CRLF + CRLF);
 
         this.changeInfo(callParam);
         
-        HangupAction hangupAct;
-        SendActionCallback sendCB = this;
-
-        hangupAct = new HangupAction();
+        HangupAction hangupAct = new HangupAction();
         
         hangupAct.setActionId(actionID);
         hangupAct.setChannel(channel);
@@ -353,152 +349,59 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
             Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-//        if (mySocket.isConnected()) {
-//            this.sendData(callParam);
-//            if(this.receiveData(input)){
-//                back = true;
-//                System.out.println("Hanging up..." + actionID);
-//            }
-//        }
-
         return back;
     }
 
-    /**
-     * 
-     */
+    
     public void cbSMSischanged() {
-
+        
     }
     
-    public boolean sendSMS(){
-        SendSMSAction action;
-        action = new SendSMSAction();
+    public boolean kSendSMS(){
         
-        action.setDevice(conteudo.getChannel());
-        action.setDestination(conteudo.getNumber());
-        action.setMessage(conteudo.getSmsText());
-        
-        try {
-            managerConnection.sendAction(action, this);
-        } catch (IOException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalStateException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return true;
-    }
-
-    /**
-     * Action: KSendSMS
-     * ActionID:
-     * Device:
-     * Destination:
-     * Confirmation:
-     * Message:
-     * @return 
-     **/ 
-    public boolean sendSms() {
-
         String channel          = conteudo.getChannel();
         String text             = conteudo.getSmsText();
-        String number           = conteudo.getNumber();
+        String destination      = conteudo.getNumber();
         String context          = conteudo.getContext();
         String tech             = conteudo.getTech();
-        String action           = "KSendSMS"; 
         boolean back            = false;
-        boolean confirmation    = conteudo.getConfirmation();
-        int actID               = this.actionID + 1;
-        this.actionID           = actID;
         String smsParam;
+        boolean confirmation    = conteudo.getConfirmation();
         
-        OriginateAction originateSmsAction;
-        SendActionCallback sendCB = this;
+        KSendSMSAction action;
+        action = new KSendSMSAction();
         
-        
-       originateSmsAction = new OriginateAction();
-
-
-       if (!number.equals("") && !channel.equals("") && !text.equals("")) {
-           
-            smsParam         = ("Action: " + action + CRLF
-                                + "ActionID: " + actID + CRLF
-                                + "device: " + channel + CRLF
-                                + "destination: " + number + CRLF
-                                + "Message: " + text + CRLF
-                                + "Confirmation: " + confirmation + CRLF + CRLF);
-           
-//            originateSmsAction.setActionId(String.valueOf(actID));
-
-            if (tech.equalsIgnoreCase("Khomp")) {
-                originateSmsAction.setVariable("Message", text);
-                originateSmsAction.setVariable("Action", action);
-                originateSmsAction.setChannel(tech + "/" + channel + "/" + number);
-            } else {
-                originateSmsAction.setChannel(tech + "/" + number);
-            }
-
-            originateSmsAction.setContext(context);
-            originateSmsAction.setActionId("KSendSMS");
-            originateSmsAction.setPriority(1);
-            originateSmsAction.setExten(number);
-
-            back = true;
-       } else {
+        if (!destination.equals("") && !channel.equals("") && !text.equals("")) {
+            
+            action.setDevice(channel);
+            action.setDestination(destination);
+            action.setMessage(text);
+            action.setConfirmation(confirmation);
+                        
+            smsParam     = ("Action: "      + action.getAction()      + CRLF
+                         + "device: "       + action.getDevice()      + CRLF
+                         + "destination: "  + action.getDestination() + CRLF
+                         + "Message: "      + action.getMessage()     + CRLF
+                         + "Confirmation: " + action.getConfirmation()+ CRLF + CRLF);
+            
+            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+                try {
+                    managerConnection.sendAction(action, sendCB);
+                    back = true;
+                    System.out.println("Sending SMS to " + destination);
+                    this.changeInfo(smsParam);  
+                } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        } else {
             System.out.println("Existem valores em branco!");
             return back;
         }
-
-        if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
-           
-            try {
-                managerConnection.sendAction(originateSmsAction, sendCB);   
-            } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
-                Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        System.out.println("Sending SMS to " + number);
-        this.changeInfo(smsParam);                
-        return back;
-        
-        
-    }
-
-    /**
-     * 
-     * @param req 
-     */
-    private void sendData(String req) {
-        System.out.println(CRLF + req);
-        output.write(req);
-        output.flush();
-    }
-
-    /**
-     * 
-     * @param input
-     * @return 
-     */
-    private boolean receiveData(BufferedReader input) {
-        boolean back = false;
-        String txt;
-        try {
-            while (!(txt = input.readLine()).equals("")) {
-                this.changeInfo(txt);
-                if (txt.equalsIgnoreCase("Response: Success")) {
-                    back = true;
-                } else if (txt.equalsIgnoreCase("Response: Goodbye")) {
-                    back = true;
-                }
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         
         return back;
     }
+ 
 
     /* Atualiza tela de Eventos e logs */
     /**
@@ -512,5 +415,154 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         telaPrincipal.setCampos();
     }   
     
+    
+    public void exportLog() {
+        String text = conteudo.getEventText();
+        System.out.println("Logs:\n" + text);
+    }
+
+    public void kSendSimCardSelection() {
+        
+        String channel  = conteudo.getSimCardChannel();
+        int    simCard  = conteudo.getSimCardSelected();
+        String selectionParam;
+        
+        KSelectSIMcardAction action;
+        action = new KSelectSIMcardAction();
+        
+        if (!channel.equals("") && simCard > -1) {
+            
+            action.setChannel(channel);
+            action.setSIMCard(simCard);
+            
+            selectionParam     = ("Action: " + action.getAction()  + CRLF
+                               + "channel: " + action.getChannel() + CRLF
+                               + "simcard: " + action.getSIMCard() + CRLF + CRLF);
+            
+            
+            
+            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+                try {
+                    managerConnection.sendAction(action, sendCB);            
+                    System.out.println("Changind SIM card to: SIMcard: " + simCard);
+                    this.changeInfo(selectionParam);  
+                } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        } else {
+            System.out.println("Existem valores em branco!");
+         
+        }
+    }
+    
+    public void kSendUuiMessage() {
+        String device  = conteudo.getUuiDevice();
+        String protocol = conteudo.getUuiProtocol();
+        String length = conteudo.getUuiLength();
+        String data  = conteudo.getUuiData();
+        
+        String uuiParam;
+        
+        KSendUUIAction action;
+        action = new KSendUUIAction();
+        
+        
+        
+        if (!device.equals("") && !data.equals("") && !protocol.equals("") && !length.equals("")) {
+            
+            action.setData(data);
+            action.setDevice(device);
+            action.setLength(length);
+            action.setProtocol(protocol);
+            
+            uuiParam = ("Dial(Khomp/" + action.getDevice() 
+                        + "/" + action.getProtocol()
+                        + "/" + action.getLength()
+                        + "/" + action.getData() + ")");
+            
+            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+                try {
+                    managerConnection.sendAction(action, sendCB);            
+                    System.out.println("Sending UUI message to " + device);
+                    this.changeInfo(uuiParam);  
+                } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        } else {
+            System.out.println("Existem valores em branco!");
+         
+        }
+        
+    }
+    
+
+    public void kSendUssdMessage() {
+        
+        String device  = conteudo.getUSSDDevice();
+        String message  = conteudo.getUSSDMessage();
+        String ussdParam;
+        
+        KSendUSSDAction action;
+        action = new KSendUSSDAction();
+        
+        if (!device.equals("") && !message.equals("")) {
+            
+            action.setDevice(device);
+            action.setMessage(message);
+            
+            ussdParam = ("Action: " + action.getAction() + CRLF
+                      + "device: " + action.getDevice() + CRLF
+                      + "message: " + action.getMessage() + CRLF + CRLF);
+            
+            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+                try {
+                    managerConnection.sendAction(action, sendCB);            
+                    System.out.println("Sending USSD message to " + device);
+                    this.changeInfo(ussdParam);  
+                } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        } else {
+            System.out.println("Existem valores em branco!");
+         
+        }       
+    }
+    
+    public void kSendPresentation() {
+        String channel      = conteudo.getChannel();
+        String presentation = conteudo.getPresentation();
+        String presentationParam;
+        
+        KGSMPresentationAction action;
+        action = new KGSMPresentationAction();
+        
+        if (!channel.equals("") && !presentation.equals("")) {
+            
+            action.setChannel(channel);
+            action.setPresentation(presentation);
+            
+            presentationParam = ("Action: "      + action.getAction() + CRLF
+                              + "channel: "      + action.getChannel()+ CRLF
+                              + "presentation: " + action.getPresentation() + CRLF + CRLF);
+            
+            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+                try {
+                    managerConnection.sendAction(action, sendCB);            
+                    System.out.println("Sending Presentation: " + presentation + " to channel: " + channel);
+                    this.changeInfo(presentationParam);  
+                } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }    
+        } else {
+            System.out.println("Existem valores em branco!");
+         
+        }   
+    }
+
+
 
 }

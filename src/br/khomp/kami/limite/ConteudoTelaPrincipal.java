@@ -35,6 +35,16 @@ public class ConteudoTelaPrincipal extends Observable {
     private String      eventText   = "\n";
     private String      tech        = "Khomp";
     private final List<Call>  tabela      = new ArrayList<>();
+    private String      ussdDevice;
+    private String      ussdMessage;
+    private String      SimCardChannel;
+    private int         simCardSelected;
+    private String      uuiDevice;
+    private String      uuiProtocol;
+    private String      uuiLength;
+    private String      uuiData;
+    private String      channelPresentation;
+    private String      presentation;
  
     
     public ConteudoTelaPrincipal() {
@@ -49,7 +59,7 @@ public class ConteudoTelaPrincipal extends Observable {
     }
     
        public void setTabela(Call tabela){
-        this.tabela.add(tabela);
+        this.tabela.add(tabela);                     
     }
     
     public List<Call> getTabela(){
@@ -158,6 +168,128 @@ public class ConteudoTelaPrincipal extends Observable {
      */
     public void setTech(String tech) {
         this.tech = tech;
+    }
+
+    
+    public String getUSSDDevice(){
+        return this.ussdDevice;
+    }
+        
+    public void setUSSDDevice(String text) {
+        this.ussdDevice = text;
+    }
+    
+    public String getUSSDMessage(){
+        return this.ussdMessage;
+    }
+    
+    public void setUSSDMessage(String text) {
+        this.ussdMessage = text;
+    }
+
+    
+    public void setSimCardChannel(String text) {
+        this.SimCardChannel = text;
+    }
+    
+    public String getSimCardChannel() {
+        return this.SimCardChannel;
+    }
+
+    
+    public void setSimCardSelected(int selectedIndex) {
+        this.simCardSelected = selectedIndex;
+    }
+    
+    public int getSimCardSelected() {
+        return this.simCardSelected;
+    }
+
+    /**
+     * @return the uuiDevice
+     */
+    public String getUuiDevice() {
+        return uuiDevice;
+    }
+
+    /**
+     * @param uuiDevice the uuiDevice to set
+     */
+    public void setUuiDevice(String uuiDevice) {
+        this.uuiDevice = uuiDevice;
+    }
+
+    /**
+     * @return the uuiProtocol
+     */
+    public String getUuiProtocol() {
+        return uuiProtocol;
+    }
+
+    /**
+     * @param uuiProtocol the uuiProtocol to set
+     */
+    public void setUuiProtocol(String uuiProtocol) {
+        this.uuiProtocol = uuiProtocol;
+    }
+
+    /**
+     * @return the uuiLength
+     */
+    public String getUuiLength() {
+        return uuiLength;
+    }
+
+    /**
+     * @param uuiLength the uuiLength to set
+     */
+    public void setUuiLength(String uuiLength) {
+        this.uuiLength = uuiLength;
+    }
+
+    /**
+     * @return the uuiData
+     */
+    public String getUuiData() {
+        return uuiData;
+    }
+
+    /**
+     * @param uuiData the uuiData to set
+     */
+    public void setUuiData(String uuiData) {
+        this.uuiData = uuiData;
+    }
+
+    /**
+     * @return the channelPresentation
+     */
+    public String getChannelPresentation() {
+        return channelPresentation;
+    }
+
+    /**
+     * @param channelPresentation the channelPresentation to set
+     */
+    public void setChannelPresentation(String channelPresentation) {
+        this.channelPresentation = channelPresentation;
+    }
+
+    /**
+     * @return the presentation
+     */
+    public String getPresentation() {
+        return presentation;
+    }
+
+    /**
+     * @param presentation the presentation to set
+     */
+    public void setPresentation(boolean presentation) {
+        if (presentation)
+            this.presentation = "restricted";
+        else
+            this.presentation = "notrestricted";
     }
     
     
