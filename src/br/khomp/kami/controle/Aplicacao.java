@@ -8,7 +8,9 @@
 package br.khomp.kami.controle;
 
 import br.khomp.kami.entidade.Call;
+import br.khomp.kami.entidade.KDialOffHook;
 import br.khomp.kami.entidade.KGSMPresentationAction;
+import br.khomp.kami.entidade.KHangup;
 import br.khomp.kami.entidade.KSelectSIMcardAction;
 import br.khomp.kami.entidade.KSendSMSAction;
 import br.khomp.kami.entidade.KSendUSSDAction;
@@ -56,9 +58,8 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         aux = "Response: " + mr.getResponse() + "\n" +"Message: " + mr.getMessage();
         System.out.println(aux);
         conteudo.setEventText(aux);
-        if(mr.getMessage().equalsIgnoreCase(QUEUED)){
-            conteudo.setTabela(call);
-            telaPrincipal.mostraTabelaChannels();
+        if(mr.getMessage().equalsIgnoreCase(QUEUED) && conteudo.getCallOption().equalsIgnoreCase("ramal")){
+
         }
     }
 
@@ -124,6 +125,23 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
     }
 
     private void tratarEvento(InterfaceEvento interfaceEvento){
+        if( interfaceEvento instanceof DialBegin ){
+            DialBegin dialBegin;
+            dialBegin = (DialBegin) interfaceEvento;
+            
+            String uniqueId;
+            uniqueId = dialBegin.getUniqueid();
+            
+            if(null != uniqueId){
+                call = new Call();
+                call.setActionID(uniqueId);
+                call.setChannel(dialBegin.getChannel());
+                call.setStatus("Connected");
+                call.setVazio(dialBegin.getDestchannel());         
+                conteudo.setTabela(call);
+                telaPrincipal.mostraTabelaChannels();
+            }
+        }
         for(String str:interfaceEvento.getAll()){
             conteudo.setEventText(str);
         }
@@ -131,7 +149,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
     
     @Override
     public void onManagerEvent(ManagerEvent event) {
-        System.out.println("evento: "+ event);
+
         if(event instanceof InterfaceEvento){
             tratarEvento((InterfaceEvento)event);
         }
@@ -144,7 +162,8 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         this.managerConnection.registerUserEventClass(AntennaLevel.class);   
         this.managerConnection.registerUserEventClass(BranchOffHook.class);   
         this.managerConnection.registerUserEventClass(BranchOnHook.class);   
-        this.managerConnection.registerUserEventClass(CollectCall.class);   
+        this.managerConnection.registerUserEventClass(CollectCall.class);  
+        this.managerConnection.registerUserEventClass(DialBegin.class);
         this.managerConnection.registerUserEventClass(KDisconnectionCause.class);   
         this.managerConnection.registerUserEventClass(NewSMS.class);   
         this.managerConnection.registerUserEventClass(NewSMSBroadcast.class);   
@@ -310,22 +329,22 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         this.changeInfo(callParam);
 
         // cria e popula objeto call
-        Call call = new Call();
-        call.setActionID(Integer.toString(actID));
-        call.setChannel(channel);
-        call.setStatus("Connected");
+//        call = new Call();
+//        call.setActionID(Integer.toString(actID));
+//
+//        call.setChannel(channel);
+//        call.setStatus("Connected");
 
-//        conteudo.setTabela(call);
-//        telaPrincipal.mostraTabelaChannels();
+
         return back;
     }
 
     public int makeCallAplicacao() {
 
-        String number = conteudo.getNumber();
         String channel = conteudo.getChannel();
-        String context = conteudo.getContext();
-        String tech = conteudo.getTech();
+        String data = conteudo.getData();
+        String application = conteudo.getApplication();
+        String applicationParam;
         int priority = 1;
         int timeOut = 30000;
         int back = 0;
@@ -334,35 +353,32 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         this.actionID = actID;
 
         OriginateAction originateAction;
-        //SendActionCallback sendCB = this;
-
         originateAction = new OriginateAction();
 
 
-        if (!number.equals("") && !channel.equals("") && !context.equals("")) {
+        if (!data.equals("") && !channel.equals("") && !application.equals("")) {
             originateAction.setActionId(String.valueOf(actID));
 
-            if (tech.equalsIgnoreCase("Khomp")) {
-                originateAction.setChannel(tech + "/" + channel + "/" + number);
-            } else {
-                originateAction.setChannel(tech + "/" + number);
-            }
-            
-            originateAction.setContext(context);
-            originateAction.setExten(number);
-            originateAction.setPriority(priority);
-            originateAction.setTimeout(timeOut);
+            originateAction.setChannel(channel);
+            originateAction.setData(data);
+            originateAction.setApplication(application);
             back = 1;
         } else {
             System.out.println("Existem valores em branco!");
             return back;
         }
 
-        if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
-            System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
-            
+        if (isConnected()) {
             try {
                 managerConnection.sendAction(originateAction, sendCB);   
+                applicationParam = ("Action: Originate" + CRLF
+                                + "ActionID: " + originateAction.getActionId() + CRLF
+                                + "Channel: " + originateAction.getChannel() + CRLF
+                                + "Application: " + originateAction.getApplication()+ CRLF
+                                + "Data: " + originateAction.getData() + CRLF + CRLF);
+                this.changeInfo(applicationParam); 
+                
+                back = 1;
             } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
                 Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -370,24 +386,6 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
             back = -1;
         }
 
-        String callParam
-                = ("Action: Originate" + CRLF
-                + "ActionID: " + originateAction.getActionId() + CRLF
-                + "Channel: " + originateAction.getChannel() + CRLF
-                + "Context: " + originateAction.getContext() + CRLF
-                + "Exten: " + originateAction.getExten() + CRLF
-                + "Priority: " + originateAction.getPriority() + CRLF + CRLF);
-
-        this.changeInfo(callParam);
-
-        // cria e popula objeto call
-        Call call = new Call();
-        call.setActionID(Integer.toString(actID));
-        call.setChannel(channel);
-        call.setStatus("Connected");
-
-//        conteudo.setTabela(call);
-//        telaPrincipal.mostraTabelaChannels();
         return back;
     }
     
@@ -416,6 +414,34 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         
         try {
             managerConnection.sendAction(hangupAct, sendCB);
+        } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+            Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return back;
+    }
+    
+    public boolean kHangup() {
+        boolean back = false;
+        String device;
+        String index;
+        KHangup action;
+        action = new KHangup();
+        
+        device = conteudo.getChannel();
+        
+        action.setDevice(device);
+        
+        String callParam
+                = ("Action:"+ action.getAction()+ CRLF
+                + "ActionID: " + actionID + CRLF
+                + "Device: " + device+ CRLF + CRLF);
+
+        this.changeInfo(callParam);
+
+        try {
+            managerConnection.sendAction(action, sendCB);
+            back = true;
         } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
             Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -602,6 +628,41 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         }       
     }
     
+    public void kDialOffHook(){
+        String channel;
+        String number;
+        String dialOffHookParam;
+        channel = conteudo.getChannel();
+        number  = conteudo.getNumber();
+        
+        KDialOffHook action;
+        action = new KDialOffHook();
+        
+        if(!channel.isEmpty() && !number.isEmpty()){
+            action.setChannel(channel);
+            action.setNumber(number);
+            dialOffHookParam = ("Action: "      + action.getAction() + CRLF
+                              + "channel: "      + action.getChannel()+ CRLF
+                              + "Number: " + action.getNumber()+ CRLF + CRLF);
+            
+            if(isConnected()){
+                try {
+                    managerConnection.sendAction(action, sendCB);
+                    System.out.println("Sending KDialOffHook "+dialOffHookParam+" to channel "+ channel);
+                    this.changeInfo(dialOffHookParam);
+                } catch (IOException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalStateException ex) {
+                    Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        }
+        
+    }
+    
     public void kSendPresentation() {
         String channel      = conteudo.getChannel();
         String presentation = conteudo.getPresentation();
@@ -619,7 +680,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
                               + "channel: "      + action.getChannel()+ CRLF
                               + "presentation: " + action.getPresentation() + CRLF + CRLF);
             
-            if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+            if (isConnected()) {
                 try {
                     managerConnection.sendAction(action, sendCB);            
                     System.out.println("Sending Presentation: " + presentation + " to channel: " + channel);
@@ -634,6 +695,11 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
             System.out.println("Existem valores em branco!");
          
         }   
+    }
+    
+    
+    private boolean isConnected(){
+        return ManagerConnectionState.CONNECTED == this.managerConnection.getState();
     }
 
 
