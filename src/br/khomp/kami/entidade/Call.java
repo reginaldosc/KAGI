@@ -40,7 +40,8 @@ public class Call {
 	 * @param channel the Channel to set
 	 */
 	public void setChannel(String channel) {
-		this.channel = channel;
+
+            this.channel = formatarString(channel);
 	}
 
 	/**
@@ -68,7 +69,13 @@ public class Call {
 	 * @param vazio the Vazio to set
 	 */
 	public void setVazio(String vazio) {
-		this.vazio = vazio;
+		this.vazio = formatarString(vazio);
 	}	
+        
+        private String formatarString(String text){
+            String[] formatted = text.split("/");
+            String[] formatted1 = formatted[1].split("-");
+            return formatted1[0];
+        }
 	
 }
