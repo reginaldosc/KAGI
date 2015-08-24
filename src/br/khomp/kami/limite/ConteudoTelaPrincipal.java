@@ -45,6 +45,7 @@ public class ConteudoTelaPrincipal extends Observable {
     private String      uuiData;
     private String      channelPresentation;
     private String      presentation;
+    private String callOption;
  
     
     public ConteudoTelaPrincipal() {
@@ -290,6 +291,16 @@ public class ConteudoTelaPrincipal extends Observable {
             this.presentation = "restricted";
         else
             this.presentation = "notrestricted";
+    }
+
+    void setCallOption(String botao) {
+        this.callOption = botao;
+//        if(botao.equalsIgnoreCase("ramal")){
+//            
+//        } else {
+//            
+//        }
+        
     }
     
     

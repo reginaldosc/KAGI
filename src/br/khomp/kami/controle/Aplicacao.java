@@ -249,7 +249,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
      * @return 
      */
     @SuppressWarnings("null")
-    public int onCall() {
+    public int makeCallRamal() {
 
         String number = conteudo.getNumber();
         String channel = conteudo.getChannel();
@@ -320,6 +320,77 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         return back;
     }
 
+    public int makeCallAplicacao() {
+
+        String number = conteudo.getNumber();
+        String channel = conteudo.getChannel();
+        String context = conteudo.getContext();
+        String tech = conteudo.getTech();
+        int priority = 1;
+        int timeOut = 30000;
+        int back = 0;
+        int actID = this.actionID + 1;
+
+        this.actionID = actID;
+
+        OriginateAction originateAction;
+        //SendActionCallback sendCB = this;
+
+        originateAction = new OriginateAction();
+
+
+        if (!number.equals("") && !channel.equals("") && !context.equals("")) {
+            originateAction.setActionId(String.valueOf(actID));
+
+            if (tech.equalsIgnoreCase("Khomp")) {
+                originateAction.setChannel(tech + "/" + channel + "/" + number);
+            } else {
+                originateAction.setChannel(tech + "/" + number);
+            }
+            
+            originateAction.setContext(context);
+            originateAction.setExten(number);
+            originateAction.setPriority(priority);
+            originateAction.setTimeout(timeOut);
+            back = 1;
+        } else {
+            System.out.println("Existem valores em branco!");
+            return back;
+        }
+
+        if (ManagerConnectionState.CONNECTED == this.managerConnection.getState()) {
+            System.out.println("Calling to " + "Channel:" + channel + ", Extension:" + number);
+            
+            try {
+                managerConnection.sendAction(originateAction, sendCB);   
+            } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
+                Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            back = -1;
+        }
+
+        String callParam
+                = ("Action: Originate" + CRLF
+                + "ActionID: " + originateAction.getActionId() + CRLF
+                + "Channel: " + originateAction.getChannel() + CRLF
+                + "Context: " + originateAction.getContext() + CRLF
+                + "Exten: " + originateAction.getExten() + CRLF
+                + "Priority: " + originateAction.getPriority() + CRLF + CRLF);
+
+        this.changeInfo(callParam);
+
+        // cria e popula objeto call
+        Call call = new Call();
+        call.setActionID(Integer.toString(actID));
+        call.setChannel(channel);
+        call.setStatus("Connected");
+
+//        conteudo.setTabela(call);
+//        telaPrincipal.mostraTabelaChannels();
+        return back;
+    }
+    
     /**
      * 
      * @param actionID
@@ -556,6 +627,8 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
                 } catch (IOException | IllegalArgumentException | IllegalStateException ex) {
                     Logger.getLogger(Aplicacao.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            } else {
+                JOptionPane.showMessageDialog(telaPrincipal, "Necessário conectar primeiro!");
             }    
         } else {
             System.out.println("Existem valores em branco!");

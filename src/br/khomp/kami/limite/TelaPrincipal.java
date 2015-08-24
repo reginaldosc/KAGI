@@ -28,6 +28,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
     private CallTableModel tableModel;
     private Observable observador;
+    private String botao = "Ramal";
 
     public TelaPrincipal(Aplicacao aplicacao) {
         try {
@@ -38,6 +39,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         this.setCampos();
         this.aplicacao = aplicacao;
         this.mostraTabelaChannels();
+        this.opcao();
+        
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();// copiar
         setLocation(screenSize.width / 2 - LARGURA / 2,// Centraliza o Frame Principal no meio da Tela
@@ -70,7 +73,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
     public final void setCampos() {
         jtfChannel.setText(conteudo.getChannel());
-        jtfContext.setText(conteudo.getContext());
+        jtfApplication.setText(conteudo.getContext());
         jtfNumber.setText(conteudo.getNumber());
         jtfPassword.setText(conteudo.getPassword());
         jtfServerIP.setText(conteudo.getServerIp());
@@ -115,7 +118,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bgRestricted = new javax.swing.ButtonGroup();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jpSocketConnection = new javax.swing.JPanel();
         jlServerIP = new javax.swing.JLabel();
@@ -144,18 +147,25 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jbCall = new javax.swing.JButton();
         jbHangup = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel2 = new javax.swing.JPanel();
+        jpCallApplication = new javax.swing.JPanel();
+        jtfChannel = new javax.swing.JTextField();
+        jtfApplication = new javax.swing.JTextField();
+        jlChannel = new javax.swing.JLabel();
+        jlApplication = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jtfData = new javax.swing.JTextField();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
-        jlTech = new javax.swing.JLabel();
-        jcbTech = new javax.swing.JComboBox();
+        jpCallRamal = new javax.swing.JPanel();
+        jlTech1 = new javax.swing.JLabel();
+        jcbTech1 = new javax.swing.JComboBox();
         jtfNumber = new javax.swing.JTextField();
-        jtfChannel = new javax.swing.JTextField();
-        jtfContext = new javax.swing.JTextField();
-        jlNumber = new javax.swing.JLabel();
-        jlChannel = new javax.swing.JLabel();
-        jlContext = new javax.swing.JLabel();
-        jcbRestrict = new javax.swing.JCheckBox();
+        jtfChannel1 = new javax.swing.JTextField();
+        jtfContext1 = new javax.swing.JTextField();
+        jlNumber1 = new javax.swing.JLabel();
+        jlChannel1 = new javax.swing.JLabel();
+        jlContext1 = new javax.swing.JLabel();
+        jcbRestrict1 = new javax.swing.JCheckBox();
         jpSMS = new javax.swing.JPanel();
         jcbSMS = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -417,7 +427,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 jbCallActionPerformed(evt);
             }
         });
-        jpExtensions.add(jbCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 69, -1));
+        jpExtensions.add(jbCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 69, -1));
 
         jbHangup.setText("Hangup");
         jbHangup.addActionListener(new java.awt.event.ActionListener() {
@@ -425,95 +435,157 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 jbHangupActionPerformed(evt);
             }
         });
-        jpExtensions.add(jbHangup, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 190, -1, -1));
+        jpExtensions.add(jbHangup, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, -1, -1));
         jpExtensions.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 32, -1, 80));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jRadioButton1.setText("Restrito");
-
-        jRadioButton2.setText("Não Restrito");
-
-        jlTech.setText("Tech: ");
-
-        jcbTech.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SIP", "Khomp" }));
-        jcbTech.setSelectedIndex(1);
-        jcbTech.setActionCommand("");
-        jcbTech.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbTechActionPerformed(evt);
-            }
-        });
-
-        jtfChannel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfChannelActionPerformed(evt);
-            }
-        });
-
-        jlNumber.setText("Number: ");
+        jpCallApplication.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jlChannel.setText("Channel: ");
 
-        jlContext.setText("Context: ");
+        jlApplication.setText("Aplicação: ");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jLabel2.setText("Data: ");
+
+        javax.swing.GroupLayout jpCallApplicationLayout = new javax.swing.GroupLayout(jpCallApplication);
+        jpCallApplication.setLayout(jpCallApplicationLayout);
+        jpCallApplicationLayout.setHorizontalGroup(
+            jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCallApplicationLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jlChannel)
-                    .addComponent(jlContext)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jlTech)
-                        .addComponent(jlNumber)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jtfContext, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jcbTech, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton2))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCallApplicationLayout.createSequentialGroup()
+                        .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jlChannel)
+                            .addComponent(jLabel2))
+                        .addGap(37, 37, 37))
+                    .addGroup(jpCallApplicationLayout.createSequentialGroup()
+                        .addComponent(jlApplication)
+                        .addGap(35, 35, 35)))
+                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtfApplication, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                    .addComponent(jtfChannel)
+                    .addComponent(jtfData))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRadioButton1)
-                    .addComponent(jRadioButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlTech)
-                    .addComponent(jcbTech, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlNumber))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlChannel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfContext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlContext))
+        jpCallApplicationLayout.setVerticalGroup(
+            jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCallApplicationLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlChannel)
+                    .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jtfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfApplication, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlApplication))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
-        jpExtensions.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 190, 170));
+        jpExtensions.add(jpCallApplication, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 170));
 
-        jcbRestrict.setText("Modo Privado");
-        jcbRestrict.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jcbRestrictItemStateChanged(evt);
+        buttonGroup1.add(jRadioButton1);
+        jRadioButton1.setText("Ramal");
+        jRadioButton1.setActionCommand("Ramal");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
             }
         });
-        jpExtensions.add(jcbRestrict, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 210, -1, -1));
+        jpExtensions.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, -1));
+
+        buttonGroup1.add(jRadioButton2);
+        jRadioButton2.setText("Aplicação");
+        jRadioButton2.setActionCommand("app");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+        jpExtensions.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 90, -1));
+
+        jpCallRamal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jlTech1.setText("Tech: ");
+
+        jcbTech1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SIP", "Khomp" }));
+        jcbTech1.setSelectedIndex(1);
+        jcbTech1.setActionCommand("");
+        jcbTech1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbTech1ActionPerformed(evt);
+            }
+        });
+
+        jlNumber1.setText("Number: ");
+
+        jlChannel1.setText("Channel: ");
+
+        jlContext1.setText("Context: ");
+
+        jcbRestrict1.setText("Modo Privado");
+        jcbRestrict1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbRestrict1ItemStateChanged(evt);
+            }
+        });
+        jcbRestrict1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbRestrict1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpCallRamalLayout = new javax.swing.GroupLayout(jpCallRamal);
+        jpCallRamal.setLayout(jpCallRamalLayout);
+        jpCallRamalLayout.setHorizontalGroup(
+            jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCallRamalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpCallRamalLayout.createSequentialGroup()
+                        .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jlChannel1)
+                            .addComponent(jlContext1)
+                            .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jlTech1)
+                                .addComponent(jlNumber1)))
+                        .addGap(35, 35, 35)
+                        .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jtfContext1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfChannel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jcbRestrict1))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+        jpCallRamalLayout.setVerticalGroup(
+            jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpCallRamalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jcbRestrict1)
+                .addGap(7, 7, 7)
+                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlTech1)
+                    .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlNumber1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfChannel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlChannel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jtfContext1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlContext1))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jpExtensions.add(jpCallRamal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 170));
 
         jTabbedPane1.addTab("Chamadas", jpExtensions);
 
@@ -1005,11 +1077,6 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         aplicacao.cbSMSischanged();
     }//GEN-LAST:event_jcbSMSItemStateChanged
 
-    private void jcbTechActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTechActionPerformed
-        System.out.println("selected: " + jcbTech.getSelectedItem());
-        conteudo.setTech(jcbTech.getSelectedItem().toString());
-    }//GEN-LAST:event_jcbTechActionPerformed
-
     private void jbHangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbHangupActionPerformed
         int i = jtChannels.getSelectedRow();
         if (i > -1) {
@@ -1025,12 +1092,18 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     }//GEN-LAST:event_jbHangupActionPerformed
 
     private void jbCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCallActionPerformed
-        conteudo.setNumber(jtfNumber.getText());
-        conteudo.setChannel(jtfChannel.getText());
-        conteudo.setContext(jtfContext.getText());
+        
+        int ret = -1;
+        if (botao.equalsIgnoreCase("Ramal")) {
+            conteudo.setNumber(jtfNumber.getText());
+            conteudo.setChannel(jtfChannel.getText());
+            conteudo.setContext(jtfApplication.getText());
 
-        int ret = aplicacao.onCall();
-
+            ret = aplicacao.makeCallRamal();
+        } else {
+            conteudo.setChannel(jtfChannel1.getText());
+            //conteudo.setAplication(jtf)
+        }
         // retorno positivo
         if ( ret == 1){
             jbHangup.setEnabled(true);
@@ -1043,15 +1116,31 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         }
     }//GEN-LAST:event_jbCallActionPerformed
 
-    private void jtfChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfChannelActionPerformed
-        System.out.println("presionou");
-    }//GEN-LAST:event_jtfChannelActionPerformed
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        botao = buttonGroup1.getSelection().getActionCommand();
+        //System.out.println(botao);
+        conteudo.setCallOption(botao);
+        opcao();
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
 
-    private void jcbRestrictItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbRestrictItemStateChanged
-        conteudo.setChannel(jtfChannel.getText());
-        conteudo.setPresentation(jcbRestrict.isSelected());
-        aplicacao.kSendPresentation();
-    }//GEN-LAST:event_jcbRestrictItemStateChanged
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        botao = buttonGroup1.getSelection().getActionCommand();
+        //System.out.println(botao);
+        conteudo.setCallOption(botao);
+        opcao();
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jcbTech1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbTech1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbTech1ActionPerformed
+
+    private void jcbRestrict1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbRestrict1ItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbRestrict1ItemStateChanged
+
+    private void jcbRestrict1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbRestrict1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbRestrict1ActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
         Object[] options = {"Sim", "N�o"};
@@ -1066,13 +1155,14 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         } else {
             this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         }
-    }
+    }  
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup bgRestricted;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1099,29 +1189,31 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JCheckBox jcbConfirmation;
     private javax.swing.JComboBox jcbEncoding;
     private javax.swing.JCheckBox jcbLineFeed;
-    private javax.swing.JCheckBox jcbRestrict;
+    private javax.swing.JCheckBox jcbRestrict1;
     private javax.swing.JCheckBox jcbSMS;
     private javax.swing.JComboBox jcbSimCard;
-    private javax.swing.JComboBox jcbTech;
+    private javax.swing.JComboBox jcbTech1;
     private javax.swing.JComboBox jcbWap;
+    private javax.swing.JLabel jlApplication;
     private javax.swing.JLabel jlChannel;
+    private javax.swing.JLabel jlChannel1;
     private javax.swing.JLabel jlChannelSim;
     private javax.swing.JLabel jlConnection;
-    private javax.swing.JLabel jlContext;
+    private javax.swing.JLabel jlContext1;
     private javax.swing.JLabel jlData;
     private javax.swing.JLabel jlDevice;
     private javax.swing.JLabel jlDeviceUSSD;
     private javax.swing.JLabel jlEncoding;
     private javax.swing.JLabel jlLength;
     private javax.swing.JLabel jlMessageUSSD;
-    private javax.swing.JLabel jlNumber;
+    private javax.swing.JLabel jlNumber1;
     private javax.swing.JLabel jlPassword;
     private javax.swing.JLabel jlPort;
     private javax.swing.JLabel jlProtocol;
     private javax.swing.JLabel jlServerIP;
     private javax.swing.JLabel jlServerPort;
     private javax.swing.JLabel jlSimCard;
-    private javax.swing.JLabel jlTech;
+    private javax.swing.JLabel jlTech1;
     private javax.swing.JLabel jlUser;
     private javax.swing.JLabel jlWap;
     private javax.swing.JMenu jmAjuda;
@@ -1130,6 +1222,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JMenuItem jmiAsterisk;
     private javax.swing.JMenuItem jmiFreeSwitch;
     private javax.swing.JMenuItem jmiSobre;
+    private javax.swing.JPanel jpCallApplication;
+    private javax.swing.JPanel jpCallRamal;
     private javax.swing.JPanel jpEvents;
     private javax.swing.JPanel jpExtensions;
     private javax.swing.JPanel jpSMS;
@@ -1144,9 +1238,12 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JTextArea jtaMessageUSSD;
     private javax.swing.JTextArea jtaSMS;
     private javax.swing.JTextArea jtaUUIData;
+    private javax.swing.JTextField jtfApplication;
     private javax.swing.JTextField jtfChannel;
+    private javax.swing.JTextField jtfChannel1;
     private javax.swing.JTextField jtfChannelSim;
-    private javax.swing.JTextField jtfContext;
+    private javax.swing.JTextField jtfContext1;
+    private javax.swing.JTextField jtfData;
     private javax.swing.JTextField jtfDeviceUSSD;
     private javax.swing.JTextField jtfNumber;
     private javax.swing.JPasswordField jtfPassword;
@@ -1184,6 +1281,18 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     @Override
     public void update(Observable o, Object arg) {
         jtaEvents.setText(conteudo.getEventText());
+    }
+
+    private void opcao() {
+        if(botao.equalsIgnoreCase("ramal")){
+            System.out.println("opcao1");
+            jpCallApplication.setVisible(false);
+            jpCallRamal.setVisible(true);
+        } else {
+            System.out.println("opcao2");
+            jpCallRamal.setVisible(false);
+            jpCallApplication.setVisible(true);
+        }
     }
 
 }
