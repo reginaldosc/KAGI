@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import br.khomp.kami.controle.Aplicacao;
 import br.khomp.kami.controle.CallTableModel;
+import br.khomp.kami.entidade.KDialOffHook;
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -28,7 +29,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private ConteudoTelaPrincipal conteudo = new ConteudoTelaPrincipal();
     private CallTableModel tableModel;
     private Observable observador;
-    private String botao = "Ramal";
+    private String botao;
 
     public TelaPrincipal(Aplicacao aplicacao) {
         try {
@@ -39,6 +40,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         this.setCampos();
         this.aplicacao = aplicacao;
         this.mostraTabelaChannels();
+        this.botao = "Ramal";
         this.opcao();
         
 
@@ -73,7 +75,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
     public final void setCampos() {
         jtfChannel.setText(conteudo.getChannel());
-        jtfApplication.setText(conteudo.getContext());
+        jtfApplication.setText(conteudo.getApplication());
         jtfNumber.setText(conteudo.getNumber());
         jtfPassword.setText(conteudo.getPassword());
         jtfServerIP.setText(conteudo.getServerIp());
@@ -148,22 +150,16 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jbHangup = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jpCallApplication = new javax.swing.JPanel();
-        jtfChannel = new javax.swing.JTextField();
         jtfApplication = new javax.swing.JTextField();
-        jlChannel = new javax.swing.JLabel();
         jlApplication = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jtfData = new javax.swing.JTextField();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jpCallRamal = new javax.swing.JPanel();
-        jlTech1 = new javax.swing.JLabel();
-        jcbTech1 = new javax.swing.JComboBox();
         jtfNumber = new javax.swing.JTextField();
-        jtfChannel1 = new javax.swing.JTextField();
         jtfContext1 = new javax.swing.JTextField();
         jlNumber1 = new javax.swing.JLabel();
-        jlChannel1 = new javax.swing.JLabel();
         jlContext1 = new javax.swing.JLabel();
         jcbRestrict1 = new javax.swing.JCheckBox();
         jpSMS = new javax.swing.JPanel();
@@ -172,32 +168,25 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jtaSMS = new javax.swing.JTextArea();
         jbSendSms = new javax.swing.JButton();
         jbClearSMS = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jcbConfirmation = new javax.swing.JCheckBox();
         jcbAlertMsg = new javax.swing.JCheckBox();
         jcbLineFeed = new javax.swing.JCheckBox();
         jcbAsync = new javax.swing.JCheckBox();
-        jcbEncoding = new javax.swing.JComboBox();
         jlEncoding = new javax.swing.JLabel();
+        jcbEncoding = new javax.swing.JComboBox();
         jlPort = new javax.swing.JLabel();
         jtfPort = new javax.swing.JTextField();
         jlWap = new javax.swing.JLabel();
         jcbWap = new javax.swing.JComboBox();
-        jpSimCard = new javax.swing.JPanel();
-        jlChannelSim = new javax.swing.JLabel();
-        jtfChannelSim = new javax.swing.JTextField();
-        jlSimCard = new javax.swing.JLabel();
-        jcbSimCard = new javax.swing.JComboBox();
-        jbSendSimSelect = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jpUSSD = new javax.swing.JPanel();
-        jlDeviceUSSD = new javax.swing.JLabel();
         jbSendUSSD = new javax.swing.JButton();
-        jtfDeviceUSSD = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         jtaMessageUSSD = new javax.swing.JTextArea();
         jlMessageUSSD = new javax.swing.JLabel();
         jpUUI = new javax.swing.JPanel();
-        jlDevice = new javax.swing.JLabel();
-        jtfUUIDevice = new javax.swing.JTextField();
         jlProtocol = new javax.swing.JLabel();
         jtfUUIProtocol = new javax.swing.JTextField();
         jlLength = new javax.swing.JLabel();
@@ -206,6 +195,18 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jtaUUIData = new javax.swing.JTextArea();
         jlData = new javax.swing.JLabel();
         jbSendUUI = new javax.swing.JButton();
+        jpSimCard = new javax.swing.JPanel();
+        jlSimCard = new javax.swing.JLabel();
+        jcbSimCard = new javax.swing.JComboBox();
+        jbSendSimSelect = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jtfNumberDialOffHook = new javax.swing.JTextField();
+        jbSendKDialOffHook = new javax.swing.JButton();
+        jlChannel = new javax.swing.JLabel();
+        jtfChannel = new javax.swing.JTextField();
+        jlTech1 = new javax.swing.JLabel();
+        jcbTech1 = new javax.swing.JComboBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmTestes = new javax.swing.JMenu();
         jmiAsterisk = new javax.swing.JMenuItem();
@@ -294,7 +295,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                         .addComponent(jlPassword)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jtfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 24, Short.MAX_VALUE))))
         );
         jpSocketConnectionLayout.setVerticalGroup(
             jpSocketConnectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -427,7 +428,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 jbCallActionPerformed(evt);
             }
         });
-        jpExtensions.add(jbCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 69, -1));
+        jpExtensions.add(jbCall, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 69, -1));
 
         jbHangup.setText("Hangup");
         jbHangup.addActionListener(new java.awt.event.ActionListener() {
@@ -435,12 +436,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 jbHangupActionPerformed(evt);
             }
         });
-        jpExtensions.add(jbHangup, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, -1, -1));
+        jpExtensions.add(jbHangup, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, -1, -1));
         jpExtensions.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 32, -1, 80));
-
-        jpCallApplication.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jlChannel.setText("Channel: ");
 
         jlApplication.setText("Aplicação: ");
 
@@ -453,80 +450,65 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
             .addGroup(jpCallApplicationLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpCallApplicationLayout.createSequentialGroup()
-                        .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlChannel)
-                            .addComponent(jLabel2))
-                        .addGap(37, 37, 37))
+                    .addComponent(jtfData, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                    .addComponent(jtfApplication)
                     .addGroup(jpCallApplicationLayout.createSequentialGroup()
-                        .addComponent(jlApplication)
-                        .addGap(35, 35, 35)))
-                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jtfApplication, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(jtfChannel)
-                    .addComponent(jtfData))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlApplication, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jpCallApplicationLayout.setVerticalGroup(
             jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpCallApplicationLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlChannel)
-                    .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jtfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jpCallApplicationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfApplication, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlApplication))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jlApplication)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jtfApplication, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jtfData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        jpExtensions.add(jpCallApplication, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 170));
+        jpExtensions.add(jpCallApplication, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 190, 170));
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Ramal");
-        jRadioButton1.setActionCommand("Ramal");
+        jRadioButton1.setActionCommand("ramal");
+        jRadioButton1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jRadioButton1.setSelected(true);
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
             }
         });
-        jpExtensions.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, -1));
+        jpExtensions.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 90, -1));
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("Aplicação");
         jRadioButton2.setActionCommand("app");
+        jRadioButton2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton2ActionPerformed(evt);
             }
         });
-        jpExtensions.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 90, -1));
+        jpExtensions.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 90, -1));
 
-        jpCallRamal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jlTech1.setText("Tech: ");
-
-        jcbTech1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SIP", "Khomp" }));
-        jcbTech1.setSelectedIndex(1);
-        jcbTech1.setActionCommand("");
-        jcbTech1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbTech1ActionPerformed(evt);
-            }
-        });
+        jpCallRamal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jpCallRamal.add(jtfNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 87, -1));
+        jpCallRamal.add(jtfContext1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, 87, -1));
 
         jlNumber1.setText("Number: ");
-
-        jlChannel1.setText("Channel: ");
+        jpCallRamal.add(jlNumber1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 50, -1));
 
         jlContext1.setText("Context: ");
+        jpCallRamal.add(jlContext1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
-        jcbRestrict1.setText("Modo Privado");
+        jcbRestrict1.setText("restricted");
         jcbRestrict1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jcbRestrict1ItemStateChanged(evt);
@@ -537,55 +519,9 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                 jcbRestrict1ActionPerformed(evt);
             }
         });
+        jpCallRamal.add(jcbRestrict1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 100, 30));
 
-        javax.swing.GroupLayout jpCallRamalLayout = new javax.swing.GroupLayout(jpCallRamal);
-        jpCallRamal.setLayout(jpCallRamalLayout);
-        jpCallRamalLayout.setHorizontalGroup(
-            jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpCallRamalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpCallRamalLayout.createSequentialGroup()
-                        .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlChannel1)
-                            .addComponent(jlContext1)
-                            .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jlTech1)
-                                .addComponent(jlNumber1)))
-                        .addGap(35, 35, 35)
-                        .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jtfContext1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfChannel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jcbRestrict1))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        jpCallRamalLayout.setVerticalGroup(
-            jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jpCallRamalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jcbRestrict1)
-                .addGap(7, 7, 7)
-                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlTech1)
-                    .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlNumber1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfChannel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlChannel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpCallRamalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jtfContext1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlContext1))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
-
-        jpExtensions.add(jpCallRamal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 170));
+        jpExtensions.add(jpCallRamal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, 190, 170));
 
         jTabbedPane1.addTab("Chamadas", jpExtensions);
 
@@ -609,7 +545,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jtaSMS.setEnabled(false);
         jScrollPane1.setViewportView(jtaSMS);
 
-        jpSMS.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 48, -1, 155));
+        jpSMS.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 73, -1, 130));
 
         jbSendSms.setText("Send");
         jbSendSms.addActionListener(new java.awt.event.ActionListener() {
@@ -627,71 +563,50 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         });
         jpSMS.add(jbClearSMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(119, 214, -1, -1));
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Opcionais", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         jcbConfirmation.setText("Confirmation");
         jcbConfirmation.setToolTipText("Confirmação de recebimento de SMS");
-        jpSMS.add(jcbConfirmation, new org.netbeans.lib.awtextra.AbsoluteConstraints(227, 48, 93, -1));
+        jPanel2.add(jcbConfirmation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 93, 20));
 
         jcbAlertMsg.setText("Alert message");
-        jpSMS.add(jcbAlertMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(227, 76, -1, -1));
+        jPanel2.add(jcbAlertMsg, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, 20));
 
         jcbLineFeed.setText("Line Feed");
-        jpSMS.add(jcbLineFeed, new org.netbeans.lib.awtextra.AbsoluteConstraints(227, 106, 93, -1));
+        jPanel2.add(jcbLineFeed, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 93, 20));
 
         jcbAsync.setText("Async");
-        jpSMS.add(jcbAsync, new org.netbeans.lib.awtextra.AbsoluteConstraints(227, 136, 93, -1));
-
-        jcbEncoding.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "7", "binary", "16" }));
-        jpSMS.add(jcbEncoding, new org.netbeans.lib.awtextra.AbsoluteConstraints(452, 49, 63, -1));
+        jPanel2.add(jcbAsync, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 93, 20));
 
         jlEncoding.setText("Encoding: ");
-        jpSMS.add(jlEncoding, new org.netbeans.lib.awtextra.AbsoluteConstraints(398, 52, -1, -1));
+        jPanel2.add(jlEncoding, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, 60, -1));
+
+        jcbEncoding.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "7", "binary", "16" }));
+        jPanel2.add(jcbEncoding, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 70, -1));
 
         jlPort.setText("Port: ");
-        jpSMS.add(jlPort, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 82, -1, -1));
-        jpSMS.add(jtfPort, new org.netbeans.lib.awtextra.AbsoluteConstraints(452, 79, 63, -1));
+        jPanel2.add(jlPort, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 50, -1));
+        jPanel2.add(jtfPort, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 70, -1));
 
         jlWap.setText("WAP: ");
-        jpSMS.add(jlWap, new org.netbeans.lib.awtextra.AbsoluteConstraints(418, 112, -1, -1));
+        jPanel2.add(jlWap, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 50, -1));
 
         jcbWap.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Não", "SI", "SL" }));
-        jpSMS.add(jcbWap, new org.netbeans.lib.awtextra.AbsoluteConstraints(452, 109, 63, -1));
+        jPanel2.add(jcbWap, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, 70, -1));
+
+        jpSMS.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 260, 180));
+        jpSMS.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 95, -1));
+
+        jLabel1.setText("Destination:");
+        jpSMS.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 60, 20));
 
         jTabbedPane1.addTab("SMS", jpSMS);
-
-        jpSimCard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jlChannelSim.setText("Channel: ");
-        jpSimCard.add(jlChannelSim, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 44, -1, -1));
-        jpSimCard.add(jtfChannelSim, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 41, 60, -1));
-
-        jlSimCard.setText("SIM card: ");
-        jpSimCard.add(jlSimCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 82, -1, -1));
-
-        jcbSimCard.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1" }));
-        jpSimCard.add(jcbSimCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 79, 60, -1));
-
-        jbSendSimSelect.setText("Send");
-        jbSendSimSelect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbSendSimSelectActionPerformed(evt);
-            }
-        });
-        jpSimCard.add(jbSendSimSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(64, 128, -1, -1));
-
-        jTabbedPane1.addTab("SIM Card", jpSimCard);
-
-        jlDeviceUSSD.setText("Device: ");
 
         jbSendUSSD.setText("Send");
         jbSendUSSD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbSendUSSDActionPerformed(evt);
-            }
-        });
-
-        jtfDeviceUSSD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfDeviceUSSDActionPerformed(evt);
             }
         });
 
@@ -706,40 +621,26 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jpUSSDLayout.setHorizontalGroup(
             jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpUSSDLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpUSSDLayout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addGroup(jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlDeviceUSSD)
-                            .addComponent(jlMessageUSSD))
-                        .addGap(18, 18, 18)
-                        .addGroup(jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane4)
-                            .addComponent(jtfDeviceUSSD)))
-                    .addGroup(jpUSSDLayout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(jbSendUSSD)))
-                .addContainerGap(350, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlMessageUSSD, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbSendUSSD))
+                .addContainerGap(288, Short.MAX_VALUE))
         );
         jpUSSDLayout.setVerticalGroup(
             jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpUSSDLayout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addGroup(jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlDeviceUSSD)
-                    .addComponent(jtfDeviceUSSD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jpUSSDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jlMessageUSSD))
+                .addContainerGap()
+                .addComponent(jlMessageUSSD)
                 .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbSendUSSD)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
 
         jTabbedPane1.addTab("USSD", jpUSSD);
-
-        jlDevice.setText("Device: ");
 
         jlProtocol.setText("Protocol: ");
 
@@ -765,52 +666,116 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
             .addGroup(jpUUILayout.createSequentialGroup()
                 .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpUUILayout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jlLength)
-                            .addComponent(jlProtocol)
-                            .addComponent(jlDevice))
-                        .addGap(10, 10, 10)
+                        .addGap(21, 21, 21)
                         .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jpUUILayout.createSequentialGroup()
-                                .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtfUUIProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jtfUUIDevice, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26)
-                                .addComponent(jlData))
-                            .addComponent(jtfUUILength, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jlLength)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jtfUUILength, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jpUUILayout.createSequentialGroup()
+                                .addComponent(jlProtocol)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfUUIProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jlData)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jpUUILayout.createSequentialGroup()
-                        .addGap(180, 180, 180)
+                        .addContainerGap()
                         .addComponent(jbSendUUI)))
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addContainerGap(277, Short.MAX_VALUE))
         );
         jpUUILayout.setVerticalGroup(
             jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpUUILayout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jpUUILayout.createSequentialGroup()
-                        .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlDevice)
-                            .addComponent(jtfUUIDevice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jlData))
-                        .addGap(18, 18, 18)
-                        .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlProtocol)
-                            .addComponent(jtfUUIProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jlLength)
-                            .addComponent(jtfUUILength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(16, 16, 16)
+                .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlProtocol)
+                    .addComponent(jtfUUIProtocol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(4, 4, 4)
+                .addGroup(jpUUILayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlLength)
+                    .addComponent(jtfUUILength, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jlData)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jbSendUUI)
-                .addGap(49, 49, 49))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("UUI", jpUUI);
+
+        jpSimCard.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jlSimCard.setText("SIM card: ");
+        jpSimCard.add(jlSimCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 20, 50, 20));
+
+        jcbSimCard.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "0", "1" }));
+        jpSimCard.add(jcbSimCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 60, -1));
+
+        jbSendSimSelect.setText("Send");
+        jbSendSimSelect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSendSimSelectActionPerformed(evt);
+            }
+        });
+        jpSimCard.add(jbSendSimSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, -1, -1));
+
+        jTabbedPane1.addTab("SIM Card", jpSimCard);
+
+        jLabel3.setText("Number:");
+
+        jbSendKDialOffHook.setText("Send");
+        jbSendKDialOffHook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbSendKDialOffHookActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jbSendKDialOffHook)
+                    .addComponent(jtfNumberDialOffHook, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(217, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jtfNumberDialOffHook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbSendKDialOffHook)
+                .addContainerGap(167, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("DialOffHook", jPanel3);
+
+        jlChannel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jlChannel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jlChannel.setText("Device/Channel");
+
+        jtfChannel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jlTech1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jlTech1.setText("Tech");
+
+        jcbTech1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SIP", "Khomp" }));
+        jcbTech1.setSelectedIndex(1);
+        jcbTech1.setActionCommand("");
+        jcbTech1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbTech1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -821,21 +786,43 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
                     .addComponent(jpStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jpTable, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jpSocketConnection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTabbedPane1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jpSocketConnection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jlTech1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jlChannel, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, Short.MAX_VALUE)
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
                         .addComponent(jpEvents, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jpSocketConnection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jlTech1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jcbTech1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlChannel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtfChannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(jpEvents, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1016,26 +1003,20 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
     private void jbSendUUIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendUUIActionPerformed
         conteudo.setUuiData(jtaUUIData.getText());
-        conteudo.setUuiDevice(jtfUUIDevice.getText());
+        conteudo.setUuiDevice(jtfChannel.getText());
         conteudo.setUuiLength(jtfUUILength.getText());
         conteudo.setUuiProtocol(jtfUUIProtocol.getText());
         aplicacao.kSendUuiMessage();
     }//GEN-LAST:event_jbSendUUIActionPerformed
 
-    private void jtfDeviceUSSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfDeviceUSSDActionPerformed
-        conteudo.setUSSDDevice(jtfDeviceUSSD.getText());
-        conteudo.setUSSDMessage(jtaMessageUSSD.getText());
-        aplicacao.kSendUssdMessage();
-    }//GEN-LAST:event_jtfDeviceUSSDActionPerformed
-
     private void jbSendUSSDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendUSSDActionPerformed
-        conteudo.setUSSDDevice(jtfDeviceUSSD.getText());
+        conteudo.setUSSDDevice(jtfChannel.getText());
         conteudo.setUSSDMessage(jtaMessageUSSD.getText());
         aplicacao.kSendUssdMessage();
     }//GEN-LAST:event_jbSendUSSDActionPerformed
 
     private void jbSendSimSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendSimSelectActionPerformed
-        conteudo.setSimCardChannel(jtfChannelSim.getText());
+        conteudo.setSimCardChannel(jtfChannel.getText());
         conteudo.setSimCardSelected(jcbSimCard.getSelectedIndex());
         aplicacao.kSendSimCardSelection();
     }//GEN-LAST:event_jbSendSimSelectActionPerformed
@@ -1082,12 +1063,19 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         if (i > -1) {
             String actionID = jtChannels.getValueAt(i, 0).toString();
             String channel = jtChannels.getValueAt(i, 1).toString();
-
-            if (aplicacao.kHangUp(actionID, channel)) {
-                tableModel.onRemove(i);
+            String device =  jtChannels.getValueAt(i, 3).toString();
+            if(jcbTech1.getSelectedItem().equals("Khomp")){
+                conteudo.setChannel(device);
+                if(aplicacao.kHangup()){
+                    tableModel.onRemove(i);
+                }
+            }else{
+                if (aplicacao.kHangUp(actionID, channel)) {
+                    tableModel.onRemove(i);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Selecione a linha da tabela.");
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione a linha da tabela.");
         }
     }//GEN-LAST:event_jbHangupActionPerformed
 
@@ -1097,12 +1085,15 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         if (botao.equalsIgnoreCase("Ramal")) {
             conteudo.setNumber(jtfNumber.getText());
             conteudo.setChannel(jtfChannel.getText());
-            conteudo.setContext(jtfApplication.getText());
+            conteudo.setContext(jtfContext1.getText());
 
             ret = aplicacao.makeCallRamal();
         } else {
-            conteudo.setChannel(jtfChannel1.getText());
-            //conteudo.setAplication(jtf)
+            conteudo.setChannel(jtfChannel.getText());
+            conteudo.setData(jtfData.getText());
+            conteudo.setApplication(jtfApplication.getText());
+            
+            ret = aplicacao.makeCallAplicacao();
         }
         // retorno positivo
         if ( ret == 1){
@@ -1114,10 +1105,12 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         } else {
             JOptionPane.showMessageDialog(this, "Erro ao enviar comando.");
         }
+        conteudo.setCallOption(botao);
     }//GEN-LAST:event_jbCallActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         botao = buttonGroup1.getSelection().getActionCommand();
+        
         //System.out.println(botao);
         conteudo.setCallOption(botao);
         opcao();
@@ -1142,9 +1135,18 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbRestrict1ActionPerformed
 
+    private void jbSendKDialOffHookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSendKDialOffHookActionPerformed
+        
+        conteudo.setChannel(jtfChannel.getText());
+        conteudo.setNumber(jtfNumberDialOffHook.getText());
+        
+        aplicacao.kDialOffHook();
+      
+    }//GEN-LAST:event_jbSendKDialOffHookActionPerformed
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
-        Object[] options = {"Sim", "N�o"};
-        int opcao = JOptionPane.showOptionDialog(this, "Deseja mesmo sair?", "Confirma��o de sa�da",
+        Object[] options = {"Sim", "Noo"};
+        int opcao = JOptionPane.showOptionDialog(this, "Deseja mesmo sair?", "Confirmacao de saida",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,
@@ -1160,9 +1162,13 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1172,6 +1178,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton jbCall;
     private javax.swing.JButton jbClearEvents;
     private javax.swing.JButton jbClearSMS;
@@ -1180,6 +1187,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JButton jbExport;
     private javax.swing.JButton jbHangup;
     private javax.swing.JButton jbPing;
+    private javax.swing.JButton jbSendKDialOffHook;
     private javax.swing.JButton jbSendSimSelect;
     private javax.swing.JButton jbSendSms;
     private javax.swing.JButton jbSendUSSD;
@@ -1196,13 +1204,9 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JComboBox jcbWap;
     private javax.swing.JLabel jlApplication;
     private javax.swing.JLabel jlChannel;
-    private javax.swing.JLabel jlChannel1;
-    private javax.swing.JLabel jlChannelSim;
     private javax.swing.JLabel jlConnection;
     private javax.swing.JLabel jlContext1;
     private javax.swing.JLabel jlData;
-    private javax.swing.JLabel jlDevice;
-    private javax.swing.JLabel jlDeviceUSSD;
     private javax.swing.JLabel jlEncoding;
     private javax.swing.JLabel jlLength;
     private javax.swing.JLabel jlMessageUSSD;
@@ -1240,17 +1244,14 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JTextArea jtaUUIData;
     private javax.swing.JTextField jtfApplication;
     private javax.swing.JTextField jtfChannel;
-    private javax.swing.JTextField jtfChannel1;
-    private javax.swing.JTextField jtfChannelSim;
     private javax.swing.JTextField jtfContext1;
     private javax.swing.JTextField jtfData;
-    private javax.swing.JTextField jtfDeviceUSSD;
     private javax.swing.JTextField jtfNumber;
+    private javax.swing.JTextField jtfNumberDialOffHook;
     private javax.swing.JPasswordField jtfPassword;
     private javax.swing.JTextField jtfPort;
     private javax.swing.JTextField jtfServerIP;
     private javax.swing.JTextField jtfServerPort;
-    private javax.swing.JTextField jtfUUIDevice;
     private javax.swing.JTextField jtfUUILength;
     private javax.swing.JTextField jtfUUIProtocol;
     private javax.swing.JTextField jtfUser;
@@ -1284,6 +1285,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     }
 
     private void opcao() {
+        System.out.println("botao "+botao);
         if(botao.equalsIgnoreCase("ramal")){
             System.out.println("opcao1");
             jpCallApplication.setVisible(false);

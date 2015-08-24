@@ -45,8 +45,10 @@ public class ConteudoTelaPrincipal extends Observable {
     private String      uuiData;
     private String      channelPresentation;
     private String      presentation;
-    private String callOption;
- 
+    private String      callOption;
+    private String      data;
+    private String      application;
+   
     
     public ConteudoTelaPrincipal() {
     }
@@ -60,6 +62,7 @@ public class ConteudoTelaPrincipal extends Observable {
     }
     
        public void setTabela(Call tabela){
+           
         this.tabela.add(tabela);                     
     }
     
@@ -293,14 +296,50 @@ public class ConteudoTelaPrincipal extends Observable {
             this.presentation = "notrestricted";
     }
 
-    void setCallOption(String botao) {
-        this.callOption = botao;
-//        if(botao.equalsIgnoreCase("ramal")){
-//            
-//        } else {
-//            
-//        }
-        
+    
+    
+    
+
+    /**
+     * @return the data
+     */
+    public String getData() {
+        return data;
+    }
+
+    /**
+     * @param data the data to set
+     */
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    /**
+     * @return the application
+     */
+    public String getApplication() {
+        return application;
+    }
+
+    /**
+     * @param application the application to set
+     */
+    public void setApplication(String application) {
+        this.application = application;
+    }
+
+    /**
+     * @return the callOption
+     */
+    public String getCallOption() {
+        return callOption;
+    }
+
+    /**
+     * @param callOption the callOption to set
+     */
+    public void setCallOption(String callOption) {
+        this.callOption = callOption;
     }
     
     
