@@ -16,6 +16,7 @@ import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Reginaldo Goncalves
@@ -216,7 +217,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KAMI");
-        setIconImages(null);
+        setIconImage(getIconImage());
         setMinimumSize(new java.awt.Dimension(1080, 680));
         setName("jfPrincipal"); // NOI18N
 
@@ -489,7 +490,6 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
         buttonGroup1.add(jRadioButton1);
         jRadioButton1.setText("Ramal");
-        jRadioButton1.setActionCommand("Ramal");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
