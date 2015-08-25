@@ -69,16 +69,16 @@ public class ConteudoTelaPrincipal extends Observable {
         
     public void setEventText (String eventText){
         //this.eventText = eventText;
-        if(eventText.equals("")){
+        if (eventText.equals("")) {
             this.eventText = eventText;
+        } else {
+            String aux = this.getEventText() + "";
+            this.eventText = aux + "\n" + eventText;
         }
-        String aux = this.getEventText() + "";
-        this.eventText = aux + "\n" + eventText;
-        
         //Notifica TelaPrincipal que chegou um evento
         setChanged();
         notifyObservers();
-        
+
     }
     
     public String getEventText() {

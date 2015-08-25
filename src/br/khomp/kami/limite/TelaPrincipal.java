@@ -10,7 +10,10 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import br.khomp.kami.controle.Aplicacao;
 import br.khomp.kami.controle.CallTableModel;
+import br.khomp.kami.utils.OptionDialog;
+import java.awt.Image;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -37,10 +40,16 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException ex) {
         }
         initComponents();
+        
+        URL url = this.getClass().getResource("/br/khomp/kami/images/fs_icon.png"); 
+        Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(url);    
+        this.setIconImage(iconeTitulo); 
+        
         this.setCampos();
         this.aplicacao = aplicacao;
         this.mostraTabelaChannels();
         this.opcao();
+
         
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();// copiar
@@ -51,6 +60,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         setObervador();
         
     }
+
     
     private void setObervador(){
         this.observador = conteudo;
@@ -120,6 +130,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jpSocketConnection = new javax.swing.JPanel();
         jlServerIP = new javax.swing.JLabel();
@@ -214,10 +225,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         jmAjuda = new javax.swing.JMenu();
         jmiAjuda = new javax.swing.JMenuItem();
         jmiSobre = new javax.swing.JMenuItem();
+        jmLogs = new javax.swing.JMenu();
+        jmiLogs = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("KAMI");
-        setIconImage(getIconImage());
         setMinimumSize(new java.awt.Dimension(1080, 680));
         setName("jfPrincipal"); // NOI18N
 
@@ -900,6 +912,20 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
 
         jMenuBar1.add(jmAjuda);
 
+        jmLogs.setText("Logs");
+        jmLogs.setMultiClickThreshhold(3L);
+        jmLogs.setName(""); // NOI18N
+
+        jmiLogs.setText("Logs");
+        jmiLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiLogsActionPerformed(evt);
+            }
+        });
+        jmLogs.add(jmiLogs);
+
+        jMenuBar1.add(jmLogs);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -997,7 +1023,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     }//GEN-LAST:event_jtChannelsKeyPressed
 
     private void jbExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbExportActionPerformed
-        JOptionPane.showMessageDialog(this, "not implemented yet!");
+        //JOptionPane.showMessageDialog(this, "not implemented yet!");
         conteudo.setEventText(jtaEvents.getText());
         aplicacao.exportLog();
     }//GEN-LAST:event_jbExportActionPerformed
@@ -1142,6 +1168,12 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbRestrict1ActionPerformed
 
+    private void jmiLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiLogsActionPerformed
+        System.out.println(evt);
+        OptionDialog.createAndShowDialog(this);
+ 
+    }//GEN-LAST:event_jmiLogsActionPerformed
+
     private void formWindowClosing(java.awt.event.WindowEvent evt) {
         Object[] options = {"Sim", "N�o"};
         int opcao = JOptionPane.showOptionDialog(this, "Deseja mesmo sair?", "Confirma��o de sa�da",
@@ -1157,12 +1189,14 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
         }
     }  
   
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1217,10 +1251,12 @@ public class TelaPrincipal extends javax.swing.JFrame implements Observer{
     private javax.swing.JLabel jlUser;
     private javax.swing.JLabel jlWap;
     private javax.swing.JMenu jmAjuda;
+    private javax.swing.JMenu jmLogs;
     private javax.swing.JMenu jmTestes;
     private javax.swing.JMenuItem jmiAjuda;
     private javax.swing.JMenuItem jmiAsterisk;
     private javax.swing.JMenuItem jmiFreeSwitch;
+    private javax.swing.JMenuItem jmiLogs;
     private javax.swing.JMenuItem jmiSobre;
     private javax.swing.JPanel jpCallApplication;
     private javax.swing.JPanel jpCallRamal;

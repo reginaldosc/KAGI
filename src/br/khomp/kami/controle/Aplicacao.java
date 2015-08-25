@@ -17,6 +17,7 @@ import br.khomp.kami.evento.*;
 import br.khomp.kami.limite.ConteudoTelaPrincipal;
 import br.khomp.kami.limite.TelaPrincipal;
 import br.khomp.kami.limite.TelaSobre;
+import br.khomp.kami.utils.GravarArquivo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.StringTokenizer;
@@ -300,7 +301,7 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
         }
 
         String callParam
-                = ("Action: Originate" + CRLF
+                = ("[ Comando Originate ]" + CRLF
                 + "ActionID: " + originateAction.getActionId() + CRLF
                 + "Channel: " + originateAction.getChannel() + CRLF
                 + "Context: " + originateAction.getContext() + CRLF
@@ -483,13 +484,15 @@ public class Aplicacao implements ManagerEventListener, SendActionCallback {
 
         System.out.println(text);
         conteudo.setEventText(text);
-        telaPrincipal.setCampos();
+        //telaPrincipal.setCampos();
     }   
     
     
     public void exportLog() {
         String text = conteudo.getEventText();
         System.out.println("Logs:\n" + text);
+        GravarArquivo gravaarquivo = new GravarArquivo();
+        gravaarquivo.gravar(text);
     }
 
     public void kSendSimCardSelection() {
