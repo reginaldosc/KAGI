@@ -13,7 +13,7 @@ public class CallTableModel extends AbstractTableModel{
         private final int vazio    = 3;
 	
 	
-	private final String colunas[]={"ActionID", "Channel", "Status", ""};
+	private final String colunas[]={"ActionID", "Channel (Orig)", "Status", "Channel (Dest)"};
 	private final List<Call> dados;//usamos como dados uma lista gen�rica de Empregado
 	
 	public CallTableModel(List<Call> dados) {
